@@ -14,14 +14,14 @@
 
 下の yaml に基づいて、tool file と job file を download する
 
-- https://raw.githubusercontent.com/common-workflow-language/common-workflow-language/main/v1.0/conformance_test_v1.0.yaml
-- https://raw.githubusercontent.com/common-workflow-language/cwl-v1.1/main/conformance_tests.yaml
-- https://raw.githubusercontent.com/common-workflow-language/cwl-v1.2/main/conformance_tests.yaml
+- <https://raw.githubusercontent.com/common-workflow-language/common-workflow-language/main/v1.0/conformance_test_v1.0.yaml>
+- <https://raw.githubusercontent.com/common-workflow-language/cwl-v1.1/main/conformance_tests.yaml>
+- <https://raw.githubusercontent.com/common-workflow-language/cwl-v1.2/main/conformance_tests.yaml>
 
 ```bash=
-$ python3 download_test.py v1.0
-$ python3 download_test.py v1.1
-$ python3 download_test.py v1.2
+python3 download_test.py v1.0
+python3 download_test.py v1.1
+python3 download_test.py v1.2
 ```
 
 ## Choose test

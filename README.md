@@ -27,7 +27,7 @@
 - css 一個も当てないレベル
   - element に id 振っとく
 - Web Form の POST ででかいファイルを送る問題
-  - https://jpostdb.org
+  - <https://jpostdb.org>
 - web component の code は基本的に触らない
   - 人はいじらない
   - 簡単、ただしいじらせない
