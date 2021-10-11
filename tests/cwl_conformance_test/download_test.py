@@ -14,8 +14,8 @@ CONFORMANCE_TEST_FILES = {
 }
 FILE_URL_BASE = {
     "v1.0": "https://raw.githubusercontent.com/common-workflow-language/common-workflow-language/main/v1.0/",  # noqa: E501
-    "v1.1": "",  # noqa: E501
-    "v1.2": "",  # noqa: E501
+    "v1.1": "https://raw.githubusercontent.com/common-workflow-language/cwl-v1.1/main/",  # noqa: E501
+    "v1.2": "https://raw.githubusercontent.com/common-workflow-language/cwl-v1.2/main/",  # noqa: E501
 }
 
 
@@ -39,24 +39,29 @@ def main():
         usage()
     with CONFORMANCE_TEST_FILES[sys.argv[1]].open("r") as f:
         tests = safe_load(f)
+    dest_dir = PWD.joinpath(sys.argv[1])
+    dest_dir.mkdir(exist_ok=True)
     for test in tests:
-        print("Downloading {}".format(test["id"]))
         try:
-            tool_path = PWD.joinpath(test["tool"])
-            tool_path.parent.mkdir(parents=True, exist_ok=True)
+            print("Downloading {}".format(test["id"]))
+        except KeyError:
+            print("Downloading {}".format(test["label"]))
+        try:
+            tool_path = dest_dir.joinpath(Path(test["tool"]).name)
             tool = download_file(FILE_URL_BASE[sys.argv[1]] + test["tool"])
             with tool_path.open("w") as f:
                 f.write(tool)
         except Exception as e:
-            print("Failed to download {}' tool: {}".format(test["id"], e))
+            print("Failed to download {}'s tool: {}".format(test["id"], e))
+            print(test["doc"])
         try:
-            job_path = PWD.joinpath(test["job"])
-            job_path.parent.mkdir(parents=True, exist_ok=True)
+            job_path = dest_dir.joinpath(Path(test["job"]).name)
             job = download_file(FILE_URL_BASE[sys.argv[1]] + test["job"])
             with job_path.open("w") as f:
                 f.write(job)
         except Exception as e:
             print("Failed to download {}'s job: {}".format(test["id"], e))
+            print(test["doc"])
 
 
 if __name__ == "__main__":
