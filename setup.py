@@ -21,9 +21,9 @@ setup(
         "pyyaml",
         "requests",
     ],
-    packages=["neko-punch", "neko-punch.tests"],
+    packages=["neko_punch", "neko_punch.tests"],
     package_dir={
-        "neko-punch": "src-py",
-        "neko-punch.tests": "tests",
+        "neko_punch": "src-py",
+        "neko_punch.tests": "tests",
     },
 )
