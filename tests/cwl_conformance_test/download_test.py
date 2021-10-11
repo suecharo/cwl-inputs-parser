@@ -3,7 +3,7 @@
 import sys
 from pathlib import Path
 
-from requests import get
+from neko_punch.utils import download_file
 from yaml import safe_load
 
 PWD = Path(__file__).parent.resolve()
@@ -22,14 +22,6 @@ FILE_URL_BASE = {
 def usage():
     """usage function"""
     print("Usage: python3 download_test.py <v1.0 | v1.1 | v1.2>")
-
-
-def download_file(url):
-    """Downloads a file from a URL and returns the content."""
-    response = get(url)
-    if response.status_code != 200:
-        raise Exception("Failed to download file: {}".format(url))
-    return response.text
 
 
 def main():
