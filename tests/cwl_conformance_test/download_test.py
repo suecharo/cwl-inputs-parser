@@ -2,9 +2,9 @@
 # coding: utf-8
 import sys
 from pathlib import Path
+
 from requests import get
 from yaml import safe_load
-
 
 PWD = Path(__file__).parent.resolve()
 CONFORMANCE_TEST_FILES = {
@@ -22,7 +22,6 @@ FILE_URL_BASE = {
 def usage():
     """usage function"""
     print("Usage: python3 download_test.py <v1.0 | v1.1 | v1.2>")
-    sys.exit(1)
 
 
 def download_file(url):
@@ -37,6 +36,7 @@ def main():
     """main function"""
     if len(sys.argv) != 2 or sys.argv[1] not in ["v1.0", "v1.1", "v1.2"]:
         usage()
+        sys.exit(1)
     with CONFORMANCE_TEST_FILES[sys.argv[1]].open("r") as f:
         tests = safe_load(f)
     dest_dir = PWD.joinpath(sys.argv[1])

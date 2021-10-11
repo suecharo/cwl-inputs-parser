@@ -10,7 +10,7 @@
 - neko-punch の web component において、2. を参考に web form を生成
 - neko-punch の web component において、web form の入力から 3. を生成
 
-## Download conformance test
+## Download test
 
 下の yaml に基づいて、tool file と job file を download する
 
@@ -23,3 +23,8 @@ $ python3 download_test.py v1.0
 $ python3 download_test.py v1.1
 $ python3 download_test.py v1.2
 ```
+
+## Choose test
+
+conformance*test*\*.yaml を修正しつつ、test を選択する。
+neko-punch として、support しない test を除く。
