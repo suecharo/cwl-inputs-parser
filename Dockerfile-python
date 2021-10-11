@@ -16,7 +16,7 @@ RUN git clone -b main --depth=1 https://github.com/common-workflow-language/cwl-
 WORKDIR /app
 COPY . .
 RUN pip install --no-cache-dir --progress-bar off -U pip setuptools wheel && \
-    pip install --no-cache-dir --progress-bar off --pre .
+    pip install --no-cache-dir --progress-bar off --editable .
 
 ENTRYPOINT ["tini", "--"]
 CMD ["sleep", "infinity"]
