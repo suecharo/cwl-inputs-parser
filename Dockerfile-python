@@ -2,24 +2,21 @@ FROM docker.io/python:3.8.12-slim-buster
 
 RUN apt update && \
     apt install -y --no-install-recommends \
+    curl \
     git \
     tini && \
     apt clean &&\
     rm -rf /var/lib/apt/lists/*
 
-RUN pip install --no-cache-dir --progress-bar off -U pip setuptools wheel && \
-    pip install --no-cache-dir --progress-bar off pyyaml
-
 WORKDIR /tmp
-RUN git clone https://github.com/common-workflow-language/cwl-utils.git && \
-    cd cwl-utils && \
-    git checkout main && \
-    pip install --no-cache-dir --progress-bar off . && \
-    cd .. && \
+RUN git clone -b main --depth=1 https://github.com/common-workflow-language/cwl-utils.git && \
+    pip install --no-cache-dir --progress-bar off ./cwl-utils && \
     rm -rf cwl-utils
 
 WORKDIR /app
 COPY . .
+RUN pip install --no-cache-dir --progress-bar off -U pip setuptools wheel && \
+    pip install --no-cache-dir --progress-bar off --pre .
 
 ENTRYPOINT ["tini", "--"]
 CMD ["sleep", "infinity"]
