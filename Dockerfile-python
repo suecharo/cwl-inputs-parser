@@ -8,15 +8,10 @@ RUN apt update && \
     apt clean &&\
     rm -rf /var/lib/apt/lists/*
 
-WORKDIR /tmp
-RUN git clone -b main --depth=1 https://github.com/common-workflow-language/cwl-utils.git && \
-    pip install --no-cache-dir --progress-bar off ./cwl-utils && \
-    rm -rf cwl-utils
-
 WORKDIR /app
 COPY . .
 RUN pip install --no-cache-dir --progress-bar off -U pip setuptools wheel && \
-    pip install --no-cache-dir --progress-bar off --editable .
+    pip install --progress-bar off -e .
 
 ENTRYPOINT ["tini", "--"]
 CMD ["sleep", "infinity"]
