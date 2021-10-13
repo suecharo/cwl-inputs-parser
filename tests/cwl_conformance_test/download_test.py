@@ -37,19 +37,32 @@ def main():
         try:
             print("Downloading {}".format(test["id"]))
         except KeyError:
-            print("Downloading {}".format(test["label"]))
+            try:
+                print("Downloading {}".format(test["label"]))
+            except KeyError:
+                continue
         try:
-            tool_path = dest_dir.joinpath(Path(test["tool"]).name)
+            tool_name = Path(test["tool"]).name
+            if "#" in tool_name:
+                tool_name = tool_name.split("#")[0]
+            tool_path = dest_dir.joinpath(tool_name)
+            if tool_path.exists():
+                continue
             tool = download_file(FILE_URL_BASE[sys.argv[1]] + test["tool"])
-            with tool_path.open("w") as f:
+            with tool_path.open("w", encoding="utf-8") as f:
                 f.write(tool)
         except Exception as e:
             print("Failed to download {}'s tool: {}".format(test["id"], e))
             print(test["doc"])
         try:
-            job_path = dest_dir.joinpath(Path(test["job"]).name)
+            job_name = Path(test["job"]).name
+            if "#" in job_name:
+                job_name = job_name.split("#")[0]
+            job_path = dest_dir.joinpath(job_name)
+            if job_path.exists():
+                continue
             job = download_file(FILE_URL_BASE[sys.argv[1]] + test["job"])
-            with job_path.open("w") as f:
+            with job_path.open("w", encoding="utf-8") as f:
                 f.write(job)
         except Exception as e:
             print("Failed to download {}'s job: {}".format(test["id"], e))
