@@ -4,7 +4,7 @@
 from setuptools import setup
 
 setup(
-    name="neko_punch",
+    name="neko-punch",
     version="0.1",
     license="Apache 2.0",
     description="Light-weight web component for workflow execution service",
@@ -17,13 +17,12 @@ setup(
     python_requires=">=3.6",
     install_requires=[
         "cwltool",
-        "cwl-utils @ git@github.com:common-workflow-language/cwl-utils@8cc5de7305c1a445a5e61e5373cfa44917366d7c",  # noqa: E501
+        # "cwl-utils",  # not working
         "pyyaml",
         "requests",
     ],
-    packages=["neko_punch", "neko_punch.tests"],
+    packages=["neko_punch"],
     package_dir={
-        "neko_punch": "src-py",
-        "neko_punch.tests": "tests",
+        "": "src-py",
     },
 )
