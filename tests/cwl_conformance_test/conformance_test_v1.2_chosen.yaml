@@ -980,12 +980,12 @@
   label: wf_scatter_oneparam_valuefrom_inputs
   reason: null
   tool: v1.2/scatter-valuefrom-inputs-wf1.cwl
-- disable: false
+- disable: true
   doc: SchemaDefRequirement with $import, and packed
   id: 136
   job: v1.2/import_schema-def_job.yml
   label: packed_import_schema
-  reason: null
+  reason: "input's type has capture_kit"
   tool: v1.2/import_schema-def_packed.cwl
 - disable: false
   doc: Test specifying secondaryFiles in subdirectories of the job input document.
@@ -1430,12 +1430,12 @@
   label: anonymous_enum_in_array
   reason: null
   tool: v1.2/anon_enum_inside_array.cwl
-- disable: false
+- disable: true
   doc: Test an anonymous enum inside an array inside a record, SchemaDefRequirement
   id: 198
   job: v1.2/anon_enum_inside_array_inside_schemadef.yml
   label: schema-def_anonymous_enum_in_array
-  reason: null
+  reason: requirements has SchemaDefRequirement
   tool: v1.2/anon_enum_inside_array_inside_schemadef.cwl
 - disable: false
   doc: Test command execution in with stdin and stdout redirection using stdin shortcut
@@ -1451,12 +1451,12 @@
   label: secondary_files_in_unnamed_records
   reason: null
   tool: v1.2/record-in-secondaryFiles.cwl
-- disable: false
+- disable: true
   doc: Test secondaryFiles on SchemaDefRequirement record fields
   id: 201
   job: v1.2/record-secondaryFiles-job.yml
   label: secondary_files_in_named_records
-  reason: null
+  reason: "requirements has SchemaDefRequirement"
   tool: v1.2/record-sd-secondaryFiles.cwl
 - disable: false
   doc: Test secondaryFiles on output record fields

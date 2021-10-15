@@ -8,7 +8,7 @@ setup(
     version="0.1",
     license="Apache 2.0",
     description="Light-weight web component for workflow execution service",
-    long_description=open("./README.md").read(),
+    long_description=open("./README.md", encoding="utf-8").read(),
     long_description_content_type="text/markdown",
     author="suecharo",
     author_email="suehiro619@gmail.com",
@@ -20,9 +20,18 @@ setup(
         # "cwl-utils",  # not working
         "pyyaml",
         "requests",
+        "mypy",
+        "types-PyYAML",
+        "types-requests",
+        "types-setuptools",
     ],
     packages=["neko_punch"],
     package_dir={
         "": "src-py",
+    },
+    entry_points={
+        "console_scripts": [
+            "neko-punch=neko_punch.main:main",
+        ]
     },
 )

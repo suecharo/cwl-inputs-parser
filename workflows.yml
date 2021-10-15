@@ -1,0 +1,2 @@
+workflows:
+  - ./tests/cwl_conformance_test/v1.2/valueFrom-constant.cwl

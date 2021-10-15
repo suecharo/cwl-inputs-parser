@@ -6,7 +6,7 @@ from pprint import pprint
 
 from cwl_utils.parser import load_document
 from neko_punch.utils import fetch_document
-from yaml import dump, safe_load
+from yaml import safe_dump, safe_load
 
 PWD = Path(__file__).parent.resolve()
 
@@ -102,7 +102,7 @@ def main():
         chosen_tests.append(chosen_test)
     chosen_tests_path = PWD.joinpath(f"conformance_test_{sys.argv[1]}_chosen.yaml")  # noqa: E501
     with chosen_tests_path.open("w") as f:
-        f.write(dump(chosen_tests, default_flow_style=False))
+        f.write(safe_dump(chosen_tests, default_flow_style=False))
 
 
 if __name__ == "__main__":
