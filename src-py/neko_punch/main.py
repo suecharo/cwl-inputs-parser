@@ -5,9 +5,8 @@ import sys
 from pathlib import Path
 
 from cwl_utils.parser import load_document
-from yaml import safe_load
-
 from neko_punch.utils import CWLUtilLoadResult, fetch_document
+from yaml import safe_load
 
 
 def arg_parser() -> argparse.ArgumentParser:

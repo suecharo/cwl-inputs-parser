@@ -2,7 +2,6 @@
 # coding: utf-8
 import sys
 from pathlib import Path
-from pprint import pprint
 
 from cwl_utils.parser import load_document
 from cwl_utils.parser.cwl_v1_2 import (CommandInputArraySchema,
@@ -11,6 +10,9 @@ from cwl_utils.parser.cwl_v1_2 import (CommandInputArraySchema,
                                        InputArraySchema, InputRecordSchema)
 from neko_punch.utils import extract_main_tool, fetch_document
 from yaml import safe_load
+
+# from pprint import pprint
+
 
 
 def main():
@@ -67,9 +69,32 @@ def main():
                     # pprint(inp.__dict__)
                     pass
             elif isinstance(inp.type, list):
-                # pprint(test["tool"])
-                # pprint(inp.__dict__)
-                pass
+                if inp.default:
+                    # [TODO] not support
+                    # 'v1.2/io-union-input-default-wf.cwl'
+                    # pprint(test["tool"])
+                    # pprint(inp.__dict__)
+                    pass
+                else:
+                    if len(inp.type) == 1:
+                        # inp.type = inp.type[0]
+                        # 'v1.2/count-lines12-wf.cwl'
+                        # 'v1.2/valueFrom-constant.cwl'
+                        pass
+                    elif len(inp.type) == 2:
+                        if 'null' not in inp.type:
+                            # [TODO] not support (union type)
+                            # pprint(test["tool"])
+                            # pprint(inp.__dict__)
+                            pass
+                        else:
+                            # pprint(test["tool"])
+                            # pprint(inp.__dict__)
+                            pass
+                    else:
+                        # [TODO] not support (union type)
+                        # 'v1.2/io-file-or-files.cwl'
+                        pass
             elif isinstance(inp.type, CommandInputArraySchema):
                 # pprint(test["tool"])
                 # pprint(inp.__dict__)

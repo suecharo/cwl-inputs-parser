@@ -87,7 +87,7 @@ def extract_main_tool(cwl_obj: CWLUtilLoadResult) -> CWLUtilObj:
     """Extracts the main tool from a CWL object."""
     if isinstance(cwl_obj, list):
         for obj in cwl_obj:
-            if obj.class_ == "Workflow" or str(obj.id).split("#")[-1] == "main":  # noqa: E501
+            if obj.class_ == "Workflow" or str(obj.id).rsplit("#", maxsplit=1)[-1] == "main":  # noqa: E501
                 return obj
     return cast(CWLUtilObj, cwl_obj)
 
@@ -144,25 +144,29 @@ class Neko:
         """Converts a CWL object to a Neko object."""
         for inp_obj in self.cwl_obj.inputs:
             if isinstance(inp_obj, str):
-                if inp_obj.type == "boolean":
-                    self.results.append(self.boolean_field(inp_obj))
-                elif inp_obj.type == "int":
-                    self.results.append(self.int_field(inp_obj))
-                elif inp_obj.type == "string":
-                    self.results.append(self.string_field(inp_obj))
-                elif inp_obj.type == "File":
-                    self.results.append(self.file_field(inp_obj))
-                elif inp_obj.type == "stdin":
-                    self.results.append(self.stdin_field(inp_obj))
-                elif inp_obj.type == "Directory":
-                    self.results.append(self.directory_field(inp_obj))
-                elif inp_obj.type == "Any":
-                    self.results.append(self.any_field(inp_obj))
+                neko_filed = self.typical_filed(inp_obj)
+                self.results.append(neko_filed)
+            elif isinstance(inp_obj, list):
+                if len(inp_obj.type) == 1:
+                    tmp_obj = deepcopy(inp_obj)
+                    tmp_obj.type = tmp_obj.type[0]
+                    neko_filed = self.typical_filed(tmp_obj)
+                    self.results.append(neko_filed)
+                elif len(inp_obj.type) == 2:
+                    if 'null' in inp_obj.type:
+                        tmp_obj = deepcopy(inp_obj)
+                        for t in inp_obj.type:
+                            if t != 'null':
+                                tmp_obj.type = t
+                        neko_filed = self.typical_filed(tmp_obj)
+                        neko_filed.required = False
+                        self.results.append(neko_filed)
+                    else:
+                        # [TODO] not support
+                        raise UnsupportedValueError("The union field does not support by neko-punch")  # noqa: E501
                 else:
                     # [TODO] not support
-                    raise UnsupportedValueError("The type field contains an unsupported format")  # noqa: E501
-            elif isinstance(inp_obj, list):
-                pass
+                    raise UnsupportedValueError("The union field does not support by neko-punch")  # noqa: E501
             elif isinstance(inp_obj, CommandInputArraySchema):
                 self.results.append(self.command_input_array_field(inp_obj))
             elif isinstance(inp_obj, CommandInputEnumSchema):
@@ -185,6 +189,29 @@ class Neko:
             else:
                 # [TODO] not support
                 raise UnsupportedValueError("The type field contains an unsupported format")  # noqa: E501
+
+    def typical_filed(self, inp_obj: CommandInputParameter) -> NekoField:
+        """
+        Generates a typical fields
+        like: boolean, int, string, File, stdin, Directory, Any
+        """
+        if inp_obj.type == "boolean":
+            return self.boolean_field(inp_obj)
+        elif inp_obj.type == "int":
+            return self.int_field(inp_obj)
+        elif inp_obj.type == "string":
+            return self.string_field(inp_obj)
+        elif inp_obj.type == "File":
+            return self.file_field(inp_obj)
+        elif inp_obj.type == "stdin":
+            return self.stdin_field(inp_obj)
+        elif inp_obj.type == "Directory":
+            return self.directory_field(inp_obj)
+        elif inp_obj.type == "Any":
+            return self.any_field(inp_obj)
+        else:
+            # [TODO] not support
+            raise UnsupportedValueError("The type field contains an unsupported format")  # noqa: E501
 
     @staticmethod
     def clean_val(val: Optional[Any]) -> Optional[Any]:
