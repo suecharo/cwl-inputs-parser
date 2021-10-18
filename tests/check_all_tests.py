@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 from pathlib import Path
-
+from pprint import pprint
 from neko_punch.utils import UnsupportedValueError, wf_path_to_neko_fields
 from schema_salad.exceptions import ValidationException
 from yaml import safe_load
@@ -15,7 +15,7 @@ def main():
     for test in conformance_test:
         wf_path = Path(__file__).parent.joinpath("cwl_conformance_test").joinpath(test["tool"])  # noqa: E501
         try:
-            wf_path_to_neko_fields(wf_path)
+            neko_fields = wf_path_to_neko_fields(wf_path)
         except Exception as e:
             if isinstance(e, ValidationException):
                 # print(test["id"])
@@ -34,13 +34,19 @@ def main():
                     # print(test["id"])
                     pass
                 elif "an unsupported format" in e.args[0]:
-                    # print(test["id"])
+                    print(test["id"])
                     pass
                 else:
+                    print(test["id"])
                     print(e)
                     pass
             else:
+                print(test["id"])
                 print(e)
+                pass
+            continue
+        # print(test["id"])
+        # pprint(neko_fields)
 
 
 if __name__ == "__main__":

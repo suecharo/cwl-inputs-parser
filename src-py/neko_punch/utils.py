@@ -149,10 +149,16 @@ class Neko:
                 self.results.append(neko_filed)
             elif isinstance(inp_obj.type, list):
                 if len(inp_obj.type) == 1:
-                    tmp_obj = deepcopy(inp_obj)
-                    tmp_obj.type = tmp_obj.type[0]
-                    neko_filed = self.typical_filed(tmp_obj)
-                    self.results.append(neko_filed)
+                    if isinstance(inp_obj.type[0], CommandInputArraySchema):
+                        tmp_obj = deepcopy(inp_obj)
+                        tmp_obj.type = inp_obj.type[0]
+                        self.results.append(self.command_input_array_field(tmp_obj))  # noqa: E501
+                    elif isinstance(inp_obj.type[0], InputArraySchema):
+                        tmp_obj = deepcopy(inp_obj)
+                        tmp_obj.type = inp_obj.type[0]
+                        self.results.append(self.input_array_field(tmp_obj))
+                    else:
+                        raise UnsupportedValueError("The type field contains an unsupported format")  # noqa: E501
                 elif len(inp_obj.type) == 2:
                     if 'null' in inp_obj.type:
                         tmp_obj = deepcopy(inp_obj)

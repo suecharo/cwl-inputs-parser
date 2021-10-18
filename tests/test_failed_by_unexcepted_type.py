@@ -3,11 +3,11 @@
 from pathlib import Path
 
 import pytest
-from neko_punch.utils import wf_path_to_neko_fields, UnsupportedValueError
+from neko_punch.utils import UnsupportedValueError, wf_path_to_neko_fields
 from yaml import safe_load
 
 CONFORMANCE_TEST_PATH = Path(__file__).parent.joinpath("cwl_conformance_test/conformance_test_v1.2_fixed.yaml")  # noqa: E501
-FAILED_TESTS = [114, 130, 136, 198, 201]
+FAILED_TESTS = [136, 198, 201]
 
 
 def test_failed_by_unexcepted_type():
