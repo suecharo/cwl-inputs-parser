@@ -20,11 +20,17 @@ setup(
         # "cwl-utils",  # not working
         "pyyaml",
         "requests",
-        "mypy",
-        "types-PyYAML",
-        "types-requests",
-        "types-setuptools",
     ],
+    extras_require={
+        "testing": [
+            "mypy",
+            "types-PyYAML",
+            "types-requests",
+            "types-setuptools",
+            "isort",
+            "pytest"
+        ],
+    },
     packages=["neko_punch"],
     package_dir={
         "": "src-py",

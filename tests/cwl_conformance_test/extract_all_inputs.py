@@ -14,7 +14,6 @@ from yaml import safe_load
 # from pprint import pprint
 
 
-
 def main():
     if len(sys.argv) != 2:
         print("Usage: extract_all_inputs.py <v1.0 | v1.1 | v1.2>")

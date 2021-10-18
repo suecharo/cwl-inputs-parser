@@ -13,7 +13,8 @@ COPY . .
 
 RUN python3 -m pip install --no-cache-dir --progress-bar off -U pip setuptools wheel && \
     python3 -m pip install --no-cache-dir --progress-bar off git+https://github.com/common-workflow-language/cwl-utils.git@main && \
-    python3 -m pip install --progress-bar off -e .
+    python3 -m pip install --progress-bar off -e . && \
+    python3 -m pip install --progress-bar off .[testing]
 
 ENTRYPOINT ["tini", "--"]
 CMD ["sleep", "infinity"]

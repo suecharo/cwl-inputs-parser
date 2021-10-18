@@ -6,6 +6,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, List, NoReturn, Optional, Union, cast
 
+from cwl_utils.parser import load_document
 from cwl_utils.parser.cwl_v1_2 import (CommandInputArraySchema,
                                        CommandInputEnumSchema,
                                        CommandInputParameter,
@@ -143,10 +144,10 @@ class Neko:
     def punch(self):
         """Converts a CWL object to a Neko object."""
         for inp_obj in self.cwl_obj.inputs:
-            if isinstance(inp_obj, str):
+            if isinstance(inp_obj.type, str):
                 neko_filed = self.typical_filed(inp_obj)
                 self.results.append(neko_filed)
-            elif isinstance(inp_obj, list):
+            elif isinstance(inp_obj.type, list):
                 if len(inp_obj.type) == 1:
                     tmp_obj = deepcopy(inp_obj)
                     tmp_obj.type = tmp_obj.type[0]
@@ -167,25 +168,25 @@ class Neko:
                 else:
                     # [TODO] not support
                     raise UnsupportedValueError("The union field does not support by neko-punch")  # noqa: E501
-            elif isinstance(inp_obj, CommandInputArraySchema):
+            elif isinstance(inp_obj.type, CommandInputArraySchema):
                 self.results.append(self.command_input_array_field(inp_obj))
-            elif isinstance(inp_obj, CommandInputEnumSchema):
+            elif isinstance(inp_obj.type, CommandInputEnumSchema):
                 # [TODO] not support
                 # self.results.append(self.command_input_enum_field(inp_obj))
-                raise UnsupportedValueError("The enum field does not support by neko-punch")  # noqa: E501
-            elif isinstance(inp_obj, CommandInputRecordSchema):
+                raise UnsupportedValueError("The CommandInputEnumSchema field does not support by neko-punch")  # noqa: E501
+            elif isinstance(inp_obj.type, CommandInputRecordSchema):
                 # [TODO] not support
                 # self.results.append(self.command_input_record_field(inp_obj))
-                raise UnsupportedValueError("The record field does not support by neko-punch")  # noqa: E501
-            elif isinstance(inp_obj, InputArraySchema):
+                raise UnsupportedValueError("The CommandInputRecordSchema field does not support by neko-punch")  # noqa: E501
+            elif isinstance(inp_obj.type, InputArraySchema):
                 if isinstance(inp_obj.type.items, InputRecordSchema):
                     # [TODO] not support
-                    raise UnsupportedValueError("The record field does not support by neko-punch")  # noqa: E501
+                    raise UnsupportedValueError("The InputRecordSchema field in the InputArraySchema field does not support by neko-punch")  # noqa: E501
                 else:
                     self.results.append(self.input_array_field(inp_obj))
-            elif isinstance(inp_obj, InputRecordSchema):
+            elif isinstance(inp_obj.type, InputRecordSchema):
                 # [TODO] not support
-                raise UnsupportedValueError("The record field does not support by neko-punch")  # noqa: E501
+                raise UnsupportedValueError("The InputRecordSchema field does not support by neko-punch")  # noqa: E501
             else:
                 # [TODO] not support
                 raise UnsupportedValueError("The type field contains an unsupported format")  # noqa: E501
@@ -543,3 +544,12 @@ class Neko:
         if result.doc is None:
             result.doc = self.clean_val(inp_obj.type.doc)
         return result
+
+
+def wf_path_to_neko_fields(wf_path: str) -> List[NekoField]:
+    """Convert workflow path to neko object."""
+    wf_doc = fetch_document(wf_path)
+    cwl_obj: CWLUtilLoadResult = load_document(wf_doc)
+    neko = Neko(cwl_obj)
+    neko.punch()
+    return neko.results

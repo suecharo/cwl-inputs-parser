@@ -4,8 +4,7 @@ import argparse
 import sys
 from pathlib import Path
 
-from cwl_utils.parser import load_document
-from neko_punch.utils import CWLUtilLoadResult, fetch_document
+from neko_punch.utils import wf_path_to_neko_fields
 from yaml import safe_load
 
 
@@ -41,9 +40,8 @@ def main() -> None:
         print("describe it as - workflows: [path, path, ...]")
         sys.exit(1)
     for wf_path in workflows["workflows"]:
-        wf_doc = fetch_document(wf_path)
-        cwl_obj: CWLUtilLoadResult = load_document(wf_doc)
-        print(cwl_obj)
+        neko_fields = wf_path_to_neko_fields(wf_path)
+        print(neko_fields)
 
 
 if __name__ == '__main__':
