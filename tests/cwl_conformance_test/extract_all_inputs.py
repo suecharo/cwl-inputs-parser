@@ -17,15 +17,16 @@ def main():
     if len(sys.argv) != 2:
         print("Usage: extract_all_inputs.py <v1.0 | v1.1 | v1.2>")
         sys.exit(1)
-    test_file_path = Path(__file__).parent.joinpath(f"conformance_test_{sys.argv[1]}_chosen.yaml")  # noqa: E501
+    test_file_path = Path(__file__).parent.joinpath(f"conformance_test_{sys.argv[1]}_fixed.yaml")  # noqa: E501
     with open(test_file_path, mode="r", encoding="utf-8") as f:
         tests = safe_load(f)
     # type_set = set()
     for test in tests:
-        if test["disable"]:
-            continue
         tool_path = Path(__file__).parent.joinpath(test["tool"])
-        cwl_obj = extract_main_tool(load_document(fetch_document(tool_path)))
+        try:
+            cwl_obj = extract_main_tool(load_document(fetch_document(tool_path)))  # noqa: E501
+        except Exception:
+            pass
         for inp in cwl_obj.inputs:
             if isinstance(inp.type, str):
                 # type_set.add(inp.type)
@@ -58,6 +59,10 @@ def main():
                     # pprint(inp.__dict__)
                     pass
                 else:
+                    # [TODO] not support
+                    # 'v1.2/import_schema-def_packed.cwl'
+                    # 'v1.2/anon_enum_inside_array_inside_schemadef.cwl'
+                    # 'v1.2/record-sd-secondaryFiles.cwl'
                     # pprint(test["tool"])
                     # pprint(inp.__dict__)
                     pass
@@ -71,19 +76,33 @@ def main():
                 pass
             elif isinstance(inp.type, CommandInputEnumSchema):
                 # [TODO] not support
+                # Not exist in conformance test v1.2
                 # pprint(test["tool"])
                 # pprint(inp.__dict__)
                 pass
             elif isinstance(inp.type, CommandInputRecordSchema):
                 # [TODO] not support
+                # Failed to `cwltool --make-template`
+                # 'v1.2/record-output.cwl'
+                # 'v1.2/anon_enum_inside_array.cwl'
+                # 'v1.2/record-in-secondaryFiles.cwl'
+                # 'v1.2/record-in-format.cwl'
+                # 'v1.2/record-out-format.cwl'
                 # pprint(test["tool"])
                 # pprint(inp.__dict__)
                 pass
             elif isinstance(inp.type, InputArraySchema):
                 if isinstance(inp.type.items, InputRecordSchema):
                     # [TODO] not support
+                    # Failed to `cwltool --make-template`
+                    # 'v1.2/scatter-valuefrom-wf1.cwl'
+                    # 'v1.2/scatter-valuefrom-wf2.cwl'
+                    # 'v1.2/scatter-valuefrom-wf3.cwl'
+                    # 'v1.2/scatter-valuefrom-wf4.cwl'
+                    # 'v1.2/scatter-valuefrom-wf5.cwl'
+                    # 'v1.2/scatter-valuefrom-inputs-wf1.cwl'
                     # pprint(test["tool"])
-                    # pprint(inp.type.__dict__)
+                    # pprint(inp.__dict__)
                     pass
                 else:
                     # pprint(test["tool"])
@@ -91,8 +110,13 @@ def main():
                     # pprint(inp.type.__dict__)
                     pass
             elif isinstance(inp.type, InputRecordSchema):
-                pprint(test["tool"])
-                pprint(inp.__dict__)
+                # [TODO] not support
+                # 'v1.2/step-valuefrom-wf.cwl'
+                # 'v1.2/record-output-wf.cwl'
+                # 'v1.2/record-in-secondaryFiles-wf.cwl'
+                # 'v1.2/record-in-secondaryFiles-missing-wf.cwl'
+                # pprint(test["tool"])
+                # pprint(inp.__dict__)
                 pass
             else:
                 # pprint(test["tool"])

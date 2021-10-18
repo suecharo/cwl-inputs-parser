@@ -4,10 +4,15 @@ from collections import OrderedDict
 from copy import deepcopy
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, List, Optional, Union, cast
+from typing import Any, List, NoReturn, Optional, Union, cast
 
-from cwl_utils.parser.cwl_v1_2 import (CommandInputParameter, CommandLineTool,
-                                       ExpressionTool, Workflow)
+from cwl_utils.parser.cwl_v1_2 import (CommandInputArraySchema,
+                                       CommandInputEnumSchema,
+                                       CommandInputParameter,
+                                       CommandInputRecordSchema,
+                                       CommandLineTool, ExpressionTool,
+                                       InputArraySchema, InputRecordSchema,
+                                       Workflow)
 from cwltool.main import CWLObjectType
 from requests import get
 
@@ -87,14 +92,45 @@ def extract_main_tool(cwl_obj: CWLUtilLoadResult) -> CWLUtilObj:
     return cast(CWLUtilObj, cwl_obj)
 
 
+class UnsupportedValueError(Exception):
+    """Raised when an unsupported value is encountered."""
+
+
+@dataclass
+class SecondaryFile:
+    """SecondaryFile"""
+    pattern: Optional[str] = None
+    required: Optional[bool] = None
+
+
 @dataclass
 class NekoField:
-    """NekoField"""
+    """
+    NekoField
+    example:
+    {
+        "default": null,
+        "doc": "doc example",
+        "id": "id example",
+        "label": "label example",
+        "type": "File",
+        "required": true,
+        "secondaryFiles": [
+            {
+                "pattern": "pattern example",
+                "required": true,
+            }
+        ],
+    }
+    """
     default: Optional[Any] = None
     doc: Optional[str] = None
     id: Optional[str] = None
     label: Optional[str] = None
     type: Optional[str] = None
+    array: bool = False
+    required: bool = True
+    secondaryFiles: Optional[List[SecondaryFile]] = None
 
 
 class Neko:
@@ -122,8 +158,33 @@ class Neko:
                     self.results.append(self.directory_field(inp_obj))
                 elif inp_obj.type == "Any":
                     self.results.append(self.any_field(inp_obj))
+                else:
+                    # [TODO] not support
+                    raise UnsupportedValueError("The type field contains an unsupported format")  # noqa: E501
             elif isinstance(inp_obj, list):
                 pass
+            elif isinstance(inp_obj, CommandInputArraySchema):
+                self.results.append(self.command_input_array_field(inp_obj))
+            elif isinstance(inp_obj, CommandInputEnumSchema):
+                # [TODO] not support
+                # self.results.append(self.command_input_enum_field(inp_obj))
+                raise UnsupportedValueError("The enum field does not support by neko-punch")  # noqa: E501
+            elif isinstance(inp_obj, CommandInputRecordSchema):
+                # [TODO] not support
+                # self.results.append(self.command_input_record_field(inp_obj))
+                raise UnsupportedValueError("The record field does not support by neko-punch")  # noqa: E501
+            elif isinstance(inp_obj, InputArraySchema):
+                if isinstance(inp_obj.type.items, InputRecordSchema):
+                    # [TODO] not support
+                    raise UnsupportedValueError("The record field does not support by neko-punch")  # noqa: E501
+                else:
+                    self.results.append(self.input_array_field(inp_obj))
+            elif isinstance(inp_obj, InputRecordSchema):
+                # [TODO] not support
+                raise UnsupportedValueError("The record field does not support by neko-punch")  # noqa: E501
+            else:
+                # [TODO] not support
+                raise UnsupportedValueError("The type field contains an unsupported format")  # noqa: E501
 
     @staticmethod
     def clean_val(val: Optional[Any]) -> Optional[Any]:
@@ -150,75 +211,81 @@ class Neko:
     def boolean_field(self, inp_obj: CommandInputParameter) -> NekoField:
         """
         Generates a NekoField from a CWL InputParameter.
-        inp_obj example:
+        inp_obj example from 'v1.2/revsort-packed.cwl'
         {
             'default': True,
             'doc': 'If true, reverse (decending) sort',
             'extension_fields': ordereddict(),
             'format': None,
-            'id': 'file:///app/tests/cwl_conformance_test/#reverse_sort',
+            'id': 'file:///app/tests/cwl_conformance_test/#main/reverse_sort',
             'inputBinding': None,
             'label': None,
             'loadContents': None,
             'loadListing': None,
-            'loadingOptions': <cwl_utils.parser.cwl_v1_2.LoadingOptions object at 0x7f7860454520>, # noqa: E501
+            'loadingOptions': <cwl_utils.parser.cwl_v1_2.LoadingOptions object at 0x7feb232f7be0>,  # noqa: E501
             'secondaryFiles': None,
             'streamable': None,
             'type': 'boolean'
         }
+        make-template result:
+        reverse_sort: true  # default value of type "boolean".
         """
         return self.template_field(inp_obj)
 
     def int_field(self, inp_obj: CommandInputParameter) -> NekoField:
         """
         Generates a NekoField from a CWL InputParameter.
-        inp_obj example:
+        inp_obj example from 'v1.2/bwa-mem-tool.cwl'
         {
             'default': None,
             'doc': None,
             'extension_fields': ordereddict(),
             'format': None,
             'id': 'file:///app/tests/cwl_conformance_test/#minimum_seed_length',  # noqa: E501
-            'inputBinding': <cwl_utils.parser.cwl_v1_2.CommandLineBinding object at 0x7f0fa553c220>,  # noqa: E501
+            'inputBinding': <cwl_utils.parser.cwl_v1_2.CommandLineBinding object at 0x7f3c1af41220>, # noqa: E501
             'label': None,
             'loadContents': None,
             'loadListing': None,
-            'loadingOptions': <cwl_utils.parser.cwl_v1_2.LoadingOptions object at 0x7f0fa757a7f0>,  # noqa: E501
+            'loadingOptions': <cwl_utils.parser.cwl_v1_2.LoadingOptions object at 0x7f3c1cdec730>,  # noqa: E501
             'secondaryFiles': None,
             'streamable': None,
             'type': 'int'
         }
+        make-template result:
+        minimum_seed_length: 0  # type "int"
         """
         return self.template_field(inp_obj)
 
     def string_field(self, inp_obj: CommandInputParameter) -> NekoField:
         """
         Generates a NekoField from a CWL InputParameter.
-        inp_obj example:
+        inp_obj example from 'v1.2/pass-unconnected.cwl'
         {
-            'default': 'hello inp1',
+            'default': 'hello inp2',
             'doc': None,
             'extension_fields': ordereddict(),
             'format': None,
-            'id': 'file:///app/tests/cwl_conformance_test/#inp1',
+            'id': 'file:///app/tests/cwl_conformance_test/#inp2',
             'inputBinding': None,
             'label': None,
             'loadContents': None,
             'loadListing': None,
-            'loadingOptions': <cwl_utils.parser.cwl_v1_2.LoadingOptions object at 0x7f930c01b370>,  # noqa: E501
+            'loadingOptions': <cwl_utils.parser.cwl_v1_2.LoadingOptions object at 0x7fd904cfe370>,  # noqa: E501
             'secondaryFiles': None,
             'streamable': None,
             'type': 'string'
         }
+        make-template result:
+        inp2: hello inp2  # default value of type "string".
         """
         return self.template_field(inp_obj)
 
     def file_field(self, inp_obj: CommandInputParameter) -> NekoField:
         """
         Generates a NekoField from a CWL InputParameter.
-        inp_obj example:
+        inp_obj example from 'v1.2/count-lines5-wf.cwl'
         {
-            'default': ordereddict([('class', 'File'), ('path', 'whale.txt')]),
+            'default': ordereddict([('class', 'File'), ('location', 'hello.txt')]),
             'doc': None,
             'extension_fields': ordereddict(),
             'format': None,
@@ -227,13 +294,15 @@ class Neko:
             'label': None,
             'loadContents': None,
             'loadListing': None,
-            'loadingOptions': <cwl_utils.parser.cwl_v1_2.LoadingOptions object at 0x7fe155efc790>,  # noqa: E501
+            'loadingOptions': <cwl_utils.parser.cwl_v1_2.LoadingOptions object at 0x7fa708c4b0d0>,  # noqa: E501
             'secondaryFiles': None,
             'streamable': None,
             'type': 'File'
         }
+        make-template result:
+        file1: {class: File, location: file:///app/tests/cwl_conformance_test/v1.2/hello.txt}  # default value of type "File".
 
-        default における path と location は基本的に全部 location と考えて良い
+        Basically, all path and location can be treated as location.
         > As a special case, if the path field is provided but the
         location field is not, an implementation may assign the value
         of the path field to location, and remove the path field.
@@ -251,7 +320,7 @@ class Neko:
     def stdin_field(self, inp_obj: CommandInputParameter) -> NekoField:
         """
         Generates a NekoField from a CWL InputParameter.
-        example:
+        inp_obj example from 'v1.2/cat-tool-shortcut.cwl'
         {
             'default': None,
             'doc': None,
@@ -262,11 +331,15 @@ class Neko:
             'label': None,
             'loadContents': None,
             'loadListing': None,
-            'loadingOptions': <cwl_utils.parser.cwl_v1_2.LoadingOptions object at 0x7f4910221e80>,  # noqa: E501
+            'loadingOptions': <cwl_utils.parser.cwl_v1_2.LoadingOptions object at 0x7f3f40a59d60>,  # noqa: E501
             'secondaryFiles': None,
             'streamable': None,
             'type': 'stdin'
         }
+        make-template result:
+        file1:  # type "File"
+            class: File
+            path: a/file/path
         """
         result = self.file_field(inp_obj)
         result.type = "File"
@@ -275,7 +348,7 @@ class Neko:
     def directory_field(self, inp_obj: CommandInputParameter) -> NekoField:
         """
         Generates a NekoField from a CWL InputParameter.
-        example:
+        inp_obj example from 'v1.2/dir.cwl'
         {
             'default': None,
             'doc': None,
@@ -285,19 +358,23 @@ class Neko:
             'inputBinding': None,
             'label': None,
             'loadContents': None,
-            'loadListing': 'shallow_listing',
-            'loadingOptions': <cwl_utils.parser.cwl_v1_2.LoadingOptions object at 0x7f975ee99a60>,  # noqa: E501
+            'loadListing': None,
+            'loadingOptions': <cwl_utils.parser.cwl_v1_2.LoadingOptions object at 0x7f44a93efca0>,  # noqa: E501
             'secondaryFiles': None,
             'streamable': None,
             'type': 'Directory'
         }
+        make-template result:
+        indir:  # type "Directory"
+            class: Directory
+            path: a/directory/path
         """
         return self.template_field(inp_obj)
 
     def any_field(self, inp_obj: CommandInputParameter) -> NekoField:
         """
         Generates a NekoField from a CWL InputParameter.
-        example:
+        inp_obj example from 'v1.2/null-expression1-tool.cwl'
         {
             'default': 'the-default',
             'doc': None,
@@ -308,10 +385,134 @@ class Neko:
             'label': None,
             'loadContents': None,
             'loadListing': None,
-            'loadingOptions': <cwl_utils.parser.cwl_v1_2.LoadingOptions object at 0x7ff803637220>,  # noqa: E501
+            'loadingOptions': <cwl_utils.parser.cwl_v1_2.LoadingOptions object at 0x7f8774eba220>,  # noqa: E501
             'secondaryFiles': None,
             'streamable': None,
             'type': 'Any'
         }
+        make-template result:
+        i1: "the-default"  # default value of type "Any".
         """
         return self.template_field(inp_obj)
+
+    def command_input_array_field(self, inp_obj: CommandInputParameter) -> NekoField:  # noqa: E501
+        """
+        Generates a NekoField from a CWL InputParameter.
+        [TODO] more check
+        inp_obj example from 'v1.2/docker-array-secondaryfiles.cwl'
+        {
+            'default': None,
+            'doc': None,
+            'extension_fields': ordereddict(),
+            'format': None,
+            'id': 'file:///app/tests/cwl_conformance_test/#fasta_path',
+            'inputBinding': None,
+            'label': None,
+            'loadContents': None,
+            'loadListing': None,
+            'loadingOptions': <cwl_utils.parser.cwl_v1_2.LoadingOptions object at 0x7fd3104d2130>,  # noqa: E501
+            'secondaryFiles': [<cwl_utils.parser.cwl_v1_2.SecondaryFileSchema object at 0x7fd3104e27c0>,  # noqa: E501
+                                <cwl_utils.parser.cwl_v1_2.SecondaryFileSchema object at 0x7fd3104e2940>,  # noqa: E501
+                                <cwl_utils.parser.cwl_v1_2.SecondaryFileSchema object at 0x7fd3104e2a60>],  # noqa: E501
+            'streamable': None,
+            'type': <cwl_utils.parser.cwl_v1_2.CommandInputArraySchema object at 0x7fd3104e2dc0>
+        }
+
+        make-template result:
+        require_dat: false  # type "boolean" (optional)
+        fasta_path:  # array of type "File"
+        - class: File
+            path: a/file/path
+
+        secondaryFiles:
+        {'extension_fields': ordereddict(),
+        'loadingOptions': <cwl_utils.parser.cwl_v1_2.LoadingOptions object at 0x7f634a456460>,
+        'pattern': '.bai',
+        'required': False}
+        {'extension_fields': ordereddict(),
+        'loadingOptions': <cwl_utils.parser.cwl_v1_2.LoadingOptions object at 0x7f634a456460>,
+        'pattern': "${ if (inputs.require_dat) {return '.dat'} else {return null} }",
+        'required': None}
+        {'extension_fields': ordereddict(),
+        'loadingOptions': <cwl_utils.parser.cwl_v1_2.LoadingOptions object at 0x7f634a456460>,
+        'pattern': '${ return null; }',
+        'required': None}
+        """
+        result = self.template_field(inp_obj)
+        result.type = "File"
+        result.array = True
+        if inp_obj.secondaryFiles:
+            result.secondaryFiles = []
+            for secondary_file in inp_obj.secondaryFiles:
+                result.secondaryFiles.append(
+                    SecondaryFile(
+                        pattern=secondary_file.pattern,
+                        required=secondary_file.required
+                    )
+                )
+        return result
+
+    def command_input_enum_field(self, inp_obj: CommandInputParameter) -> NoReturn:  # noqa: E501
+        """
+        Generates a NekoField from a CWL InputParameter.
+
+        [TODO] do not know how to handle enum field in CWL, therefore
+        the neko-punch will not support this.
+        """
+
+    def command_input_record_field(self, inp_obj: CommandInputParameter) -> NoReturn:  # noqa: E501
+        """
+        Generates a NekoField from a CWL InputParameter.
+        v1.2/record-output.cwl
+        v1.2/anon_enum_inside_array.cwl
+        v1.2/record-in-secondaryFiles.cwl
+        v1.2/record-in-format.cwl
+        v1.2/record-out-format.cwl
+
+        [TODO] do not know how to handle record field in CWL, therefore
+        the neko-punch will not support this.
+        """
+
+    def input_array_field(self, inp_obj: CommandInputParameter) -> NekoField:
+        """
+        Generates a NekoField from a CWL InputParameter.
+        inp_obj example from 'v1.2/count-lines3-wf.cwl'
+        {
+            'default': None,
+            'doc': None,
+            'extension_fields': ordereddict(),
+            'format': None,
+            'id': 'file:///app/tests/cwl_conformance_test/#file1',
+            'inputBinding': None,
+            'label': None,
+            'loadContents': None,
+            'loadListing': None,
+            'loadingOptions': <cwl_utils.parser.cwl_v1_2.LoadingOptions object at 0x7f26ca1b2160>,  # noqa: E501
+            'secondaryFiles': None,
+            'streamable': None,
+            'type': <cwl_utils.parser.cwl_v1_2.InputArraySchema object at 0x7f26ca1422e0>
+        }
+        type:
+        {
+            'doc': None,
+            'extension_fields': ordereddict(),
+            'items': 'File',
+            'label': None,
+            'loadingOptions': <cwl_utils.parser.cwl_v1_2.LoadingOptions object at 0x7f26ca1b2160>,
+            'name': '_:7db2ff08-5fed-4261-b514-fe5eccc43048',
+            'type': 'array'
+        }
+
+        make-template result:
+        file1:  # array of type "File"
+            - class: File
+                path: a/file/path
+        """
+        result = self.template_field(inp_obj)
+        result.type = inp_obj.type.items
+        result.array = True
+        if result.label is None:
+            result.label = self.clean_val(inp_obj.type.label)
+        if result.doc is None:
+            result.doc = self.clean_val(inp_obj.type.doc)
+        return result

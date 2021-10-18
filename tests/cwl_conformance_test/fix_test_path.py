@@ -4,8 +4,6 @@ import sys
 from pathlib import Path
 from pprint import pprint
 
-from cwl_utils.parser import load_document
-from neko_punch.utils import fetch_document
 from yaml import safe_dump, safe_load
 
 PWD = Path(__file__).parent.resolve()
@@ -13,7 +11,7 @@ PWD = Path(__file__).parent.resolve()
 
 def usage():
     """usage function"""
-    print("Usage: python3 choose_test.py <v1.0 | v1.1 | v1.2>")  # noqa: E501
+    print("Usage: python3 fix_test_path.py <v1.0 | v1.1 | v1.2>")  # noqa: E501
 
 
 def check_special_field(cwl_obj):
@@ -57,52 +55,55 @@ def main():
         sys.exit(1)
     conformance_test_path = \
         PWD.joinpath(f"conformance_test_{sys.argv[1]}.yaml")
-    with conformance_test_path.open("r") as f:
+    with conformance_test_path.open(mode="r", encoding="utf-8") as f:
         tests = safe_load(f)
-    chosen_tests = []
+    fixed_tests = []
     for test in tests:
         if "id" not in test and "label" not in test:
             continue
-
-        chosen_test = {
+        fixed_test = {
             "id": test.get("id", ""),
             "label": test.get("label", "").replace("\n", " ").strip(),
             "doc": test.get("doc", "").replace("\n", " ").strip(),
             "tool": None,
             "job": None,
-            "disable": False,
-            "reason": None,
         }
-        if 'tool' not in test:
-            chosen_test['disable'] = True
-            chosen_test['reason'] = "No tool"
         tool = f"{sys.argv[1]}/{test['tool'].split('/')[-1]}".strip() if "tool" in test else ""  # noqa: E501
         job = f"{sys.argv[1]}/{test['job'].split('/')[-1]}".strip() if "job" in test else ""  # noqa: E501
         if "#" in tool:
             tool = tool.split("#")[0]
         if "#" in job:
             job = job.split("#")[0]
-        chosen_test["tool"] = tool
-        chosen_test["job"] = job
+        fixed_test["tool"] = tool
+        fixed_test["job"] = job
 
-        try:
-            cwl_obj = load_document(fetch_document(PWD.joinpath(tool)))
-        except Exception:
-            chosen_test["disable"] = True
-            chosen_test["reason"] = "Failed to load tool"
-        if isinstance(cwl_obj, list):
-            for obj in cwl_obj:
-                if obj.class_ == "Workflow" or obj.id.split("#")[-1] == "main":
-                    cwl_obj = obj
-                    break
+        # try:
+        #     cwl_obj = load_document(fetch_document(PWD.joinpath(tool)))
+        # except Exception:
+        #     [TODO] failed to load tool
+        #     tool ids:
+        #     6
+        #     59
+        #     60
+        #     61
+        #     62
+        #     105
+        #     print(test["id"])
+        #     pass
 
-        print(chosen_test["tool"])
-        check_special_field(cwl_obj)
+        # if isinstance(cwl_obj, list):
+        #     for obj in cwl_obj:
+        #         if obj.class_ == "Workflow" or obj.id.split("#")[-1] == "main":  # noqa: E501
+        #             cwl_obj = obj
+        #             break
 
-        chosen_tests.append(chosen_test)
-    chosen_tests_path = PWD.joinpath(f"conformance_test_{sys.argv[1]}_chosen.yaml")  # noqa: E501
-    with chosen_tests_path.open("w") as f:
-        f.write(safe_dump(chosen_tests, default_flow_style=False))
+        # print(fixed_test["tool"])
+        # check_special_field(cwl_obj)
+
+        fixed_tests.append(fixed_test)
+    fixed_tests_path = PWD.joinpath(f"conformance_test_{sys.argv[1]}_fixed.yaml")  # noqa: E501
+    with fixed_tests_path.open("w") as f:
+        f.write(safe_dump(fixed_tests, default_flow_style=False))
 
 
 if __name__ == "__main__":

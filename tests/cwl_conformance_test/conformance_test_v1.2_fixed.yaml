@@ -1,1858 +1,1342 @@
-- disable: false
-  doc: General test of command line generation
+- doc: General test of command line generation
   id: 1
   job: v1.2/bwa-mem-job.json
   label: cl_basic_generation
-  reason: null
   tool: v1.2/bwa-mem-tool.cwl
-- disable: false
-  doc: Test nested prefixes with arrays
+- doc: Test nested prefixes with arrays
   id: 2
   job: v1.2/bwa-mem-job.json
   label: nested_prefixes_arrays
-  reason: null
   tool: v1.2/binding-test.cwl
-- disable: false
-  doc: Test nested command line bindings
+- doc: Test nested command line bindings
   id: 3
   job: v1.2/tmap-job.json
   label: nested_cl_bindings
-  reason: null
   tool: v1.2/tmap-tool.cwl
-- disable: false
-  doc: Test command line with optional input (missing)
+- doc: Test command line with optional input (missing)
   id: 4
   job: v1.2/cat-job.json
   label: cl_optional_inputs_missing
-  reason: null
   tool: v1.2/cat1-testcli.cwl
-- disable: false
-  doc: Test command line with optional input (provided)
+- doc: Test command line with optional input (provided)
   id: 5
   job: v1.2/cat-n-job.json
   label: cl_optional_bindings_provided
-  reason: null
   tool: v1.2/cat1-testcli.cwl
-- disable: true
-  doc: Test InitialWorkDirRequirement ExpressionEngineRequirement.engineConfig feature
+- doc: Test InitialWorkDirRequirement ExpressionEngineRequirement.engineConfig feature
   id: 6
   job: v1.2/cat-job.json
   label: initworkdir_expreng_requirements
-  reason: Failed to load tool
   tool: v1.2/template-tool.cwl
-- disable: false
-  doc: Test command execution in Docker with stdout redirection
+- doc: Test command execution in Docker with stdout redirection
   id: 7
   job: v1.2/cat-job.json
   label: stdout_redirect_docker
-  reason: null
   tool: v1.2/cat3-tool.cwl
-- disable: false
-  doc: Test command execution in Docker with shortcut stdout redirection
+- doc: Test command execution in Docker with shortcut stdout redirection
   id: 8
   job: v1.2/cat-job.json
   label: stdout_redirect_shortcut_docker
-  reason: null
   tool: v1.2/cat3-tool-shortcut.cwl
-- disable: false
-  doc: Test command execution in Docker with mediumcut stdout redirection
+- doc: Test command execution in Docker with mediumcut stdout redirection
   id: 9
   job: v1.2/cat-job.json
   label: stdout_redirect_mediumcut_docker
-  reason: null
   tool: v1.2/cat3-tool-mediumcut.cwl
-- disable: false
-  doc: Test command line with stderr redirection
+- doc: Test command line with stderr redirection
   id: 10
   job: v1.2/empty.json
   label: stderr_redirect
-  reason: null
   tool: v1.2/stderr.cwl
-- disable: false
-  doc: Test command line with stderr redirection, brief syntax
+- doc: Test command line with stderr redirection, brief syntax
   id: 11
   job: v1.2/empty.json
   label: stderr_redirect_shortcut
-  reason: null
   tool: v1.2/stderr-shortcut.cwl
-- disable: false
-  doc: Test command line with stderr redirection, named brief syntax
+- doc: Test command line with stderr redirection, named brief syntax
   id: 12
   job: v1.2/empty.json
   label: stderr_redirect_mediumcut
-  reason: null
   tool: v1.2/stderr-mediumcut.cwl
-- disable: false
-  doc: Test command execution in Docker with stdin and stdout redirection
+- doc: Test command execution in Docker with stdin and stdout redirection
   id: 13
   job: v1.2/cat-job.json
   label: stdinout_redirect_docker
-  reason: null
   tool: v1.2/cat4-tool.cwl
-- disable: false
-  doc: Test default usage of Any in expressions.
+- doc: Test default usage of Any in expressions.
   id: 14
   job: v1.2/empty.json
   label: expression_any
-  reason: null
   tool: v1.2/null-expression1-tool.cwl
-- disable: false
-  doc: Test explicitly passing null to Any type inputs with default values.
+- doc: Test explicitly passing null to Any type inputs with default values.
   id: 15
   job: v1.2/null-expression1-job.json
   label: expression_any_null
-  reason: null
   tool: v1.2/null-expression1-tool.cwl
-- disable: false
-  doc: Testing the string 'null' does not trip up an Any with a default value.
+- doc: Testing the string 'null' does not trip up an Any with a default value.
   id: 16
   job: v1.2/null-expression2-job.json
   label: expression_any_string
-  reason: null
   tool: v1.2/null-expression1-tool.cwl
-- disable: false
-  doc: Test Any without defaults cannot be unspecified.
+- doc: Test Any without defaults cannot be unspecified.
   id: 17
   job: v1.2/empty.json
   label: expression_any_nodefaultany
-  reason: null
   tool: v1.2/null-expression2-tool.cwl
-- disable: false
-  doc: Test explicitly passing null to Any type without a default value.
+- doc: Test explicitly passing null to Any type without a default value.
   id: 18
   job: v1.2/null-expression1-job.json
   label: expression_any_null_nodefaultany
-  reason: null
   tool: v1.2/null-expression2-tool.cwl
-- disable: false
-  doc: Testing the string 'null' does not trip up an Any without a default value.
+- doc: Testing the string 'null' does not trip up an Any without a default value.
   id: 19
   job: v1.2/null-expression2-job.json
   label: expression_any_nullstring_nodefaultany
-  reason: null
   tool: v1.2/null-expression2-tool.cwl
-- disable: false
-  doc: Testing Any type compatibility in outputSource
+- doc: Testing Any type compatibility in outputSource
   id: 20
   job: v1.2/any-type-job.json
   label: any_outputSource_compatibility
-  reason: null
   tool: v1.2/any-type-compat.cwl
-- disable: false
-  doc: Test command execution in with stdin and stdout redirection
+- doc: Test command execution in with stdin and stdout redirection
   id: 21
   job: v1.2/cat-job.json
   label: stdinout_redirect
-  reason: null
   tool: v1.2/cat-tool.cwl
-- disable: false
-  doc: Test ExpressionTool with Javascript engine
+- doc: Test ExpressionTool with Javascript engine
   id: 22
   job: v1.2/parseInt-job.json
   label: expression_parseint
-  reason: null
   tool: v1.2/parseInt-tool.cwl
-- disable: false
-  doc: Test outputEval to transform output
+- doc: Test outputEval to transform output
   id: 23
   job: v1.2/wc-job.json
   label: expression_outputEval
-  reason: null
   tool: v1.2/wc2-tool.cwl
-- disable: false
-  doc: Test two step workflow with imported tools
+- doc: Test two step workflow with imported tools
   id: 24
   job: v1.2/wc-job.json
   label: wf_wc_parseInt
-  reason: null
   tool: v1.2/count-lines1-wf.cwl
-- disable: false
-  doc: Test two step workflow with inline tools
+- doc: Test two step workflow with inline tools
   id: 25
   job: v1.2/wc-job.json
   label: wf_wc_expressiontool
-  reason: null
   tool: v1.2/count-lines2-wf.cwl
-- disable: false
-  doc: Test single step workflow with Scatter step
+- doc: Test single step workflow with Scatter step
   id: 26
   job: v1.2/count-lines3-job.json
   label: wf_wc_scatter
-  reason: null
   tool: v1.2/count-lines3-wf.cwl
-- disable: false
-  doc: Test single step workflow with Scatter step and two data links connected to
+- doc: Test single step workflow with Scatter step and two data links connected to
     same input, default merge behavior
   id: 27
   job: v1.2/count-lines4-job.json
   label: wf_wc_scatter_multiple_merge
-  reason: null
   tool: v1.2/count-lines4-wf.cwl
-- disable: false
-  doc: Test single step workflow with Scatter step and two data links connected to
+- doc: Test single step workflow with Scatter step and two data links connected to
     same input, nested merge behavior
   id: 28
   job: v1.2/count-lines6-job.json
   label: wf_wc_scatter_multiple_nested
-  reason: null
   tool: v1.2/count-lines6-wf.cwl
-- disable: false
-  doc: Test single step workflow with Scatter step and two data links connected to
+- doc: Test single step workflow with Scatter step and two data links connected to
     same input, flattened merge behavior
   id: 29
   job: v1.2/count-lines6-job.json
   label: wf_wc_scatter_multiple_flattened
-  reason: null
   tool: v1.2/count-lines7-wf.cwl
-- disable: false
-  doc: Test when step source is a single-item list and there is no linkMerge, then
+- doc: Test when step source is a single-item list and there is no linkMerge, then
     it not wrapped in a list, and that MultipleInputFeatureRequirement is not required.
   id: 30
   job: v1.2/count-lines4-job.json
   label: wf_wc_nomultiple
-  reason: null
   tool: v1.2/count-lines13-wf.cwl
-- disable: false
-  doc: Test when step source is a single-item list and linkMerge is listed, then it
+- doc: Test when step source is a single-item list and linkMerge is listed, then it
     is wrapped in a list.
   id: count-lines19-wf
   job: v1.2/count-lines4-job.json
   label: wf_wc_nomultiple_merge_nested
-  reason: null
   tool: v1.2/count-lines19-wf.cwl
-- disable: false
-  doc: Test workflow with default value for input parameter (missing)
+- doc: Test workflow with default value for input parameter (missing)
   id: 31
   job: v1.2/empty.json
   label: wf_input_default_missing
-  reason: null
   tool: v1.2/count-lines5-wf.cwl
-- disable: false
-  doc: Test workflow with default value for input parameter (provided)
+- doc: Test workflow with default value for input parameter (provided)
   id: 32
   job: v1.2/wc-job.json
   label: wf_input_default_provided
-  reason: null
   tool: v1.2/count-lines5-wf.cwl
-- disable: false
-  doc: Test that workflow defaults override tool defaults
+- doc: Test that workflow defaults override tool defaults
   id: 33
   job: v1.2/empty.json
   label: wf_default_tool_default
-  reason: null
   tool: v1.2/echo-wf-default.cwl
-- disable: false
-  doc: Test EnvVarRequirement
+- doc: Test EnvVarRequirement
   id: 34
   job: v1.2/env-job.json
   label: envvar_req
-  reason: null
   tool: v1.2/env-tool1.cwl
-- disable: false
-  doc: Test workflow scatter with single scatter parameter
+- doc: Test workflow scatter with single scatter parameter
   id: 35
   job: v1.2/scatter-job1.json
   label: wf_scatter_single_param
-  reason: null
   tool: v1.2/scatter-wf1.cwl
-- disable: false
-  doc: Test workflow scatter with two scatter parameters and nested_crossproduct join
+- doc: Test workflow scatter with two scatter parameters and nested_crossproduct join
     method
   id: 36
   job: v1.2/scatter-job2.json
   label: wf_scatter_two_nested_crossproduct
-  reason: null
   tool: v1.2/scatter-wf2.cwl
-- disable: false
-  doc: Test workflow scatter with two scatter parameters and flat_crossproduct join
+- doc: Test workflow scatter with two scatter parameters and flat_crossproduct join
     method
   id: 37
   job: v1.2/scatter-job2.json
   label: wf_scatter_two_flat_crossproduct
-  reason: null
   tool: v1.2/scatter-wf3.cwl
-- disable: false
-  doc: Test workflow scatter with two scatter parameters and dotproduct join method
+- doc: Test workflow scatter with two scatter parameters and dotproduct join method
   id: 38
   job: v1.2/scatter-job2.json
   label: wf_scatter_two_dotproduct
-  reason: null
   tool: v1.2/scatter-wf4.cwl
-- disable: false
-  doc: Test workflow scatter with single empty list parameter
+- doc: Test workflow scatter with single empty list parameter
   id: 39
   job: v1.2/scatter-empty-job1.json
   label: wf_scatter_emptylist
-  reason: null
   tool: v1.2/scatter-wf1.cwl
-- disable: false
-  doc: Test workflow scatter with two scatter parameters and nested_crossproduct join
+- doc: Test workflow scatter with two scatter parameters and nested_crossproduct join
     method with second list empty
   id: 40
   job: v1.2/scatter-empty-job2.json
   label: wf_scatter_nested_crossproduct_secondempty
-  reason: null
   tool: v1.2/scatter-wf2.cwl
-- disable: false
-  doc: Test workflow scatter with two scatter parameters and nested_crossproduct join
+- doc: Test workflow scatter with two scatter parameters and nested_crossproduct join
     method with first list empty
   id: 41
   job: v1.2/scatter-empty-job3.json
   label: wf_scatter_nested_crossproduct_firstempty
-  reason: null
   tool: v1.2/scatter-wf3.cwl
-- disable: false
-  doc: Test workflow scatter with two scatter parameters, one of which is empty and
+- doc: Test workflow scatter with two scatter parameters, one of which is empty and
     flat_crossproduct join method
   id: 42
   job: v1.2/scatter-empty-job2.json
   label: wf_scatter_flat_crossproduct_oneempty
-  reason: null
   tool: v1.2/scatter-wf3.cwl
-- disable: false
-  doc: Test workflow scatter with two empty scatter parameters and dotproduct join
+- doc: Test workflow scatter with two empty scatter parameters and dotproduct join
     method
   id: 43
   job: v1.2/scatter-empty-job4.json
   label: wf_scatter_dotproduct_twoempty
-  reason: null
   tool: v1.2/scatter-wf4.cwl
-- disable: false
-  doc: Test Any type input parameter
+- doc: Test Any type input parameter
   id: 44
   job: v1.2/env-job.json
   label: any_input_param
-  reason: null
   tool: v1.2/echo-tool.cwl
-- disable: false
-  doc: Test nested workflow
+- doc: Test nested workflow
   id: 45
   job: v1.2/wc-job.json
   label: nested_workflow
-  reason: null
   tool: v1.2/count-lines8-wf.cwl
-- disable: false
-  doc: Test requirement priority
+- doc: Test requirement priority
   id: 46
   job: v1.2/env-job.json
   label: requirement_priority
-  reason: null
   tool: v1.2/env-wf1.cwl
-- disable: false
-  doc: Test requirements override hints
+- doc: Test requirements override hints
   id: 47
   job: v1.2/env-job.json
   label: requirement_override_hints
-  reason: null
   tool: v1.2/env-wf2.cwl
-- disable: false
-  doc: Test requirements on workflow steps
+- doc: Test requirements on workflow steps
   id: 48
   job: v1.2/env-job.json
   label: requirement_workflow_steps
-  reason: null
   tool: v1.2/env-wf3.cwl
-- disable: false
-  doc: Test default value on step input parameter
+- doc: Test default value on step input parameter
   id: 49
   job: v1.2/empty.json
   label: step_input_default_value
-  reason: null
   tool: v1.2/count-lines9-wf.cwl
-- disable: false
-  doc: Test use default value on step input parameter with empty source
+- doc: Test use default value on step input parameter with empty source
   id: 50
   job: v1.2/empty.json
   label: step_input_default_value_nosource
-  reason: null
   tool: v1.2/count-lines11-wf.cwl
-- disable: false
-  doc: Test use default value on step input parameter with null source
+- doc: Test use default value on step input parameter with null source
   id: 51
   job: v1.2/file1-null.json
   label: step_input_default_value_nullsource
-  reason: null
   tool: v1.2/count-lines11-wf.cwl
-- disable: false
-  doc: Test default value on step input parameter overridden by provided source
+- doc: Test default value on step input parameter overridden by provided source
   id: 52
   job: v1.2/cat-job.json
   label: step_input_default_value_overriden
-  reason: null
   tool: v1.2/count-lines11-wf.cwl
-- disable: false
-  doc: Test simple workflow
+- doc: Test simple workflow
   id: 53
   job: v1.2/revsort-job.json
   label: wf_simple
-  reason: null
   tool: v1.2/revsort.cwl
-- disable: false
-  doc: Test unknown hints are ignored.
+- doc: Test unknown hints are ignored.
   id: 54
   job: v1.2/cat-job.json
   label: hints_unknown_ignored
-  reason: null
   tool: v1.2/cat5-tool.cwl
-- disable: false
-  doc: Test InitialWorkDirRequirement linking input files and capturing secondaryFiles
+- doc: Test InitialWorkDirRequirement linking input files and capturing secondaryFiles
     on input and output. Also tests the use of a variety of parameter references and
     expressions in the secondaryFiles field.
   id: 55
   job: v1.2/search-job.json
   label: initial_workdir_secondary_files_expr
-  reason: null
   tool: v1.2/search.cwl
-- disable: false
-  doc: Test InitialWorkDirRequirement with expression in filename.
+- doc: Test InitialWorkDirRequirement with expression in filename.
   id: 56
   job: v1.2/rename-job.json
   label: rename
-  reason: null
   tool: v1.2/rename.cwl
-- disable: false
-  doc: Test if trailing newline is present in file entry in InitialWorkDir
+- doc: Test if trailing newline is present in file entry in InitialWorkDir
   id: 57
   job: v1.2/string-job.json
   label: initial_workdir_trailingnl
-  reason: null
   tool: v1.2/iwdr-entry.cwl
-- disable: false
-  doc: Test inline expressions
+- doc: Test inline expressions
   id: 58
   job: v1.2/wc-job.json
   label: inline_expressions
-  reason: null
   tool: v1.2/wc4-tool.cwl
-- disable: true
-  doc: Test SchemaDefRequirement definition used in tool parameter
+- doc: Test SchemaDefRequirement definition used in tool parameter
   id: 59
   job: v1.2/schemadef-job.json
   label: schemadef_req_tool_param
-  reason: Failed to load tool
   tool: v1.2/schemadef-tool.cwl
-- disable: true
-  doc: Test SchemaDefRequirement definition used in workflow parameter
+- doc: Test SchemaDefRequirement definition used in workflow parameter
   id: 60
   job: v1.2/schemadef-job.json
   label: schemadef_req_wf_param
-  reason: Failed to load tool
   tool: v1.2/schemadef-wf.cwl
-- disable: true
-  doc: Test parameter evaluation, no support for JS expressions
+- doc: Test parameter evaluation, no support for JS expressions
   id: 61
   job: v1.2/empty.json
   label: param_evaluation_noexpr
-  reason: Failed to load tool
   tool: v1.2/params.cwl
-- disable: true
-  doc: Test parameter evaluation, with support for JS expressions
+- doc: Test parameter evaluation, with support for JS expressions
   id: 62
   job: v1.2/empty.json
   label: param_evaluation_expr
-  reason: Failed to load tool
   tool: v1.2/params2.cwl
-- disable: false
-  doc: Test metadata
+- doc: Test metadata
   id: 63
   job: v1.2/cat-job.json
   label: metadata
-  reason: null
   tool: v1.2/metadata.cwl
-- disable: false
-  doc: Test simple format checking.
+- doc: Test simple format checking.
   id: 64
   job: v1.2/formattest-job.json
   label: format_checking
-  reason: null
   tool: v1.2/formattest.cwl
-- disable: false
-  doc: Test format checking against ontology using subclassOf.
+- doc: Test format checking against ontology using subclassOf.
   id: 65
   job: v1.2/formattest2-job.json
   label: format_checking_subclass
-  reason: null
   tool: v1.2/formattest2.cwl
-- disable: false
-  doc: Test format checking against ontology using equivalentClass.
+- doc: Test format checking against ontology using equivalentClass.
   id: 66
   job: v1.2/formattest2-job.json
   label: format_checking_equivalentclass
-  reason: null
   tool: v1.2/formattest3.cwl
-- disable: false
-  doc: Test optional output file and optional secondaryFile on output.
+- doc: Test optional output file and optional secondaryFile on output.
   id: 67
   job: v1.2/cat-job.json
   label: output_secondaryfile_optional
-  reason: null
   tool: v1.2/optional-output.cwl
-- disable: false
-  doc: Test that valueFrom is ignored when the parameter is null
+- doc: Test that valueFrom is ignored when the parameter is null
   id: 68
   job: v1.2/empty.json
   label: valuefrom_ignored_null
-  reason: null
   tool: v1.2/vf-concat.cwl
-- disable: false
-  doc: Test that second expression in concatenated valueFrom is not ignored
+- doc: Test that second expression in concatenated valueFrom is not ignored
   id: 69
   job: v1.2/cat-job.json
   label: valuefrom_secondexpr_ignored
-  reason: null
   tool: v1.2/vf-concat.cwl
-- disable: false
-  doc: Test valueFrom on workflow step.
+- doc: Test valueFrom on workflow step.
   id: 70
   job: v1.2/step-valuefrom-wf.json
   label: valuefrom_wf_step
-  reason: null
   tool: v1.2/step-valuefrom-wf.cwl
-- disable: false
-  doc: Test valueFrom on workflow step with multiple sources
+- doc: Test valueFrom on workflow step with multiple sources
   id: 71
   job: v1.2/step-valuefrom-job.json
   label: valuefrom_wf_step_multiple
-  reason: null
   tool: v1.2/step-valuefrom2-wf.cwl
-- disable: false
-  doc: Test valueFrom on workflow step referencing other inputs
+- doc: Test valueFrom on workflow step referencing other inputs
   id: 72
   job: v1.2/step-valuefrom-job.json
   label: valuefrom_wf_step_other
-  reason: null
   tool: v1.2/step-valuefrom3-wf.cwl
-- disable: false
-  doc: Test record type output binding.
+- doc: Test record type output binding.
   id: 73
   job: v1.2/record-output-job.json
   label: record_output_binding
-  reason: null
   tool: v1.2/record-output.cwl
-- disable: false
-  doc: Test support for reading cwl.output.json when running in a Docker container
+- doc: Test support for reading cwl.output.json when running in a Docker container
     and just 'path' is provided.
   id: 74
   job: v1.2/empty.json
   label: docker_json_output_path
-  reason: null
   tool: v1.2/test-cwl-out.cwl
-- disable: false
-  doc: Test support for reading cwl.output.json when running in a Docker container
+- doc: Test support for reading cwl.output.json when running in a Docker container
     and just 'location' is provided.
   id: 75
   job: v1.2/empty.json
   label: docker_json_output_location
-  reason: null
   tool: v1.2/test-cwl-out2.cwl
-- disable: false
-  doc: Test support for returning multiple glob patterns from expression
+- doc: Test support for returning multiple glob patterns from expression
   id: 76
   job: v1.2/abc.json
   label: multiple_glob_expr_list
-  reason: null
   tool: v1.2/glob-expr-list.cwl
-- disable: false
-  doc: Test workflow scatter with single scatter parameter and two valueFrom on step
+- doc: Test workflow scatter with single scatter parameter and two valueFrom on step
     input (first and current el)
   id: 77
   job: v1.2/scatter-valuefrom-job1.json
   label: wf_scatter_oneparam_valuefrom
-  reason: null
   tool: v1.2/scatter-valuefrom-wf1.cwl
-- disable: false
-  doc: Test workflow scatter with two scatter parameters and nested_crossproduct join
+- doc: Test workflow scatter with two scatter parameters and nested_crossproduct join
     method and valueFrom on step input
   id: 78
   job: v1.2/scatter-valuefrom-job2.json
   label: wf_scatter_twoparam_nested_crossproduct_valuefrom
-  reason: null
   tool: v1.2/scatter-valuefrom-wf2.cwl
-- disable: false
-  doc: Test workflow scatter with two scatter parameters and flat_crossproduct join
+- doc: Test workflow scatter with two scatter parameters and flat_crossproduct join
     method and valueFrom on step input
   id: 79
   job: v1.2/scatter-valuefrom-job2.json
   label: wf_scatter_twoparam_flat_crossproduct_valuefrom
-  reason: null
   tool: v1.2/scatter-valuefrom-wf3.cwl
-- disable: false
-  doc: Test workflow scatter with two scatter parameters and dotproduct join method
+- doc: Test workflow scatter with two scatter parameters and dotproduct join method
     and valueFrom on step input
   id: 80
   job: v1.2/scatter-valuefrom-job2.json
   label: wf_scatter_twoparam_dotproduct_valuefrom
-  reason: null
   tool: v1.2/scatter-valuefrom-wf4.cwl
-- disable: false
-  doc: Test workflow scatter with single scatter parameter and two valueFrom on step
+- doc: Test workflow scatter with single scatter parameter and two valueFrom on step
     input (current el twice)
   id: 81
   job: v1.2/scatter-valuefrom-job1.json
   label: wf_scatter_oneparam_valuefrom_twice_current_el
-  reason: null
   tool: v1.2/scatter-valuefrom-wf5.cwl
-- disable: false
-  doc: Test valueFrom eval on scattered input parameter
+- doc: Test valueFrom eval on scattered input parameter
   id: 82
   job: v1.2/scatter-valuefrom-job3.json
   label: wf_scatter_oneparam_valueFrom
-  reason: null
   tool: v1.2/scatter-valuefrom-wf6.cwl
-- disable: false
-  doc: Test workflow two input files with same name.
+- doc: Test workflow two input files with same name.
   id: 83
   job: v1.2/conflict-job.json
   label: wf_two_inputfiles_namecollision
-  reason: null
   tool: v1.2/conflict-wf.cwl
-- disable: false
-  doc: Test directory input with parameter reference
+- doc: Test directory input with parameter reference
   id: 84
   job: v1.2/dir-job.yml
   label: directory_input_param_ref
-  reason: null
   tool: v1.2/dir.cwl
-- disable: false
-  doc: Test directory input in Docker
+- doc: Test directory input in Docker
   id: 85
   job: v1.2/dir-job.yml
   label: directory_input_docker
-  reason: null
   tool: v1.2/dir2.cwl
-- disable: false
-  doc: Test directory output
+- doc: Test directory output
   id: 86
   job: v1.2/dir3-job.yml
   label: directory_output
-  reason: null
   tool: v1.2/dir3.cwl
-- disable: false
-  doc: Test directories in secondaryFiles
+- doc: Test directories in secondaryFiles
   id: 87
   job: v1.2/dir4-job.yml
   label: directory_secondaryfiles
-  reason: null
   tool: v1.2/dir4.cwl
-- disable: false
-  doc: Test dynamic initial work dir
+- doc: Test dynamic initial work dir
   id: 88
   job: v1.2/dir-job.yml
   label: dynamic_initial_workdir
-  reason: null
   tool: v1.2/dir5.cwl
-- disable: false
-  doc: Test writable staged files.
+- doc: Test writable staged files.
   id: 89
   job: v1.2/stagefile-job.yml
   label: writable_stagedfiles
-  reason: null
   tool: v1.2/stagefile.cwl
-- disable: false
-  doc: Test file literal as input
+- doc: Test file literal as input
   id: 90
   job: v1.2/file-literal.yml
   label: input_file_literal
-  reason: null
   tool: v1.2/cat3-tool.cwl
-- disable: false
-  doc: Test expression in InitialWorkDir listing
+- doc: Test expression in InitialWorkDir listing
   id: 91
   job: v1.2/arguments-job.yml
   label: initial_workdir_expr
-  reason: null
   tool: v1.2/linkfile.cwl
-- disable: false
-  doc: Test nameroot/nameext expression in arguments, stdout
+- doc: Test nameroot/nameext expression in arguments, stdout
   id: 92
   job: v1.2/wc-job.json
   label: nameroot_nameext_stdout_expr
-  reason: null
   tool: v1.2/nameroot.cwl
-- disable: false
-  doc: Test directory input with inputBinding
+- doc: Test directory input with inputBinding
   id: 93
   job: v1.2/dir-job.yml
   label: input_dir_inputbinding
-  reason: null
   tool: v1.2/dir6.cwl
-- disable: false
-  doc: Test command line generation of array-of-arrays
+- doc: Test command line generation of array-of-arrays
   id: 94
   job: v1.2/nested-array-job.yml
   label: cl_gen_arrayofarrays
-  reason: null
   tool: v1.2/nested-array.cwl
-- disable: false
-  doc: Test $HOME and $TMPDIR are set correctly
+- doc: Test $HOME and $TMPDIR are set correctly
   id: 95
   job: v1.2/empty.json
   label: env_home_tmpdir
-  reason: null
   tool: v1.2/envvar.cwl
-- disable: false
-  doc: Test $HOME and $TMPDIR are set correctly in Docker
+- doc: Test $HOME and $TMPDIR are set correctly in Docker
   id: 96
   job: v1.2/empty.json
   label: env_home_tmpdir_docker
-  reason: null
   tool: v1.2/envvar2.cwl
-- disable: false
-  doc: Test that expressionLib requirement of individual tool step overrides expressionLib
+- doc: Test that expressionLib requirement of individual tool step overrides expressionLib
     of workflow.
   id: 97
   job: v1.2/empty.json
   label: expressionlib_tool_wf_override
-  reason: null
   tool: v1.2/js-expr-req-wf.cwl
-- disable: false
-  doc: Test output of InitialWorkDir
+- doc: Test output of InitialWorkDir
   id: 98
   job: v1.2/initialworkdirrequirement-docker-out-job.json
   label: initial_workdir_output
-  reason: null
   tool: v1.2/initialworkdirrequirement-docker-out.cwl
-- disable: false
-  doc: Test embedded subworkflow
+- doc: Test embedded subworkflow
   id: 99
   job: v1.2/wc-job.json
   label: embedded_subworkflow
-  reason: null
   tool: v1.2/count-lines10-wf.cwl
-- disable: false
-  doc: Test required, optional and null secondaryFiles on array of files.
+- doc: Test required, optional and null secondaryFiles on array of files.
   id: 100
   job: v1.2/docker-array-secondaryfiles-job.json
   label: filesarray_secondaryfiles
-  reason: null
   tool: v1.2/docker-array-secondaryfiles.cwl
-- disable: false
-  doc: Test required, optional and null secondaryFiles on array of files.
+- doc: Test required, optional and null secondaryFiles on array of files.
   id: 101
   job: v1.2/docker-array-secondaryfiles-job2.json
   label: filesarray_secondaryfiles2
-  reason: null
   tool: v1.2/docker-array-secondaryfiles.cwl
-- disable: false
-  doc: Test directory literal output created by ExpressionTool
+- doc: Test directory literal output created by ExpressionTool
   id: 102
   job: v1.2/dir7.yml
   label: exprtool_directory_literal
-  reason: null
   tool: v1.2/dir7.cwl
-- disable: false
-  doc: Test file literal output created by ExpressionTool
+- doc: Test file literal output created by ExpressionTool
   id: 103
   job: v1.2/empty.json
   label: exprtool_file_literal
-  reason: null
   tool: v1.2/file-literal-ex.cwl
-- disable: false
-  doc: Test dockerOutputDirectory
+- doc: Test dockerOutputDirectory
   id: 104
   job: v1.2/empty.json
   label: dockeroutputdir
-  reason: null
   tool: v1.2/docker-output-dir.cwl
-- disable: true
-  doc: Test hints with $import
+- doc: Test hints with $import
   id: 105
   job: v1.2/empty.json
   label: hints_import
-  reason: Failed to load tool
   tool: v1.2/imported-hint.cwl
-- disable: false
-  doc: Test warning instead of error when default path is not found
+- doc: Test warning instead of error when default path is not found
   id: 106
   job: v1.2/default_path_job.yml
   label: default_path_notfound_warning
-  reason: null
   tool: v1.2/default_path.cwl
-- disable: false
-  doc: Test InlineJavascriptRequirement with multiple expressions in the same tool
+- doc: Test InlineJavascriptRequirement with multiple expressions in the same tool
   id: 107
   job: v1.2/empty.json
   label: inlinejs_req_expressions
-  reason: null
   tool: v1.2/inline-js.cwl
-- disable: false
-  doc: Test if a writable input directory is recursively copied and writable
+- doc: Test if a writable input directory is recursively copied and writable
   id: 108
   job: v1.2/recursive-input-directory.yml
   label: input_dir_recurs_copy_writable
-  reason: null
   tool: v1.2/recursive-input-directory.cwl
-- disable: false
-  doc: Test that missing parameters are null (not undefined) in expression
+- doc: Test that missing parameters are null (not undefined) in expression
   id: 109
   job: v1.2/empty.json
   label: null_missing_params
-  reason: null
   tool: v1.2/null-defined.cwl
-- disable: false
-  doc: Test that provided parameter is not null in expression
+- doc: Test that provided parameter is not null in expression
   id: 110
   job: v1.2/cat-job.json
   label: param_notnull_expr
-  reason: null
   tool: v1.2/null-defined.cwl
-- disable: false
-  doc: Test compound workflow document
+- doc: Test compound workflow document
   id: 111
   job: v1.2/revsort-job.json
   label: wf_compound_doc
-  reason: null
   tool: v1.2/revsort-packed.cwl
-- disable: false
-  doc: Test that nameroot and nameext are generated from basename at execution time
+- doc: Test that nameroot and nameext are generated from basename at execution time
     by the runner
   id: 112
   job: v1.2/basename-fields-job.yml
   label: nameroot_nameext_generated
-  reason: null
   tool: v1.2/basename-fields-test.cwl
-- disable: false
-  doc: Test that file path in $(inputs) for initialworkdir is in $(outdir).
+- doc: Test that file path in $(inputs) for initialworkdir is in $(outdir).
   id: 113
   job: v1.2/wc-job.json
   label: initialworkpath_output
-  reason: null
   tool: v1.2/initialwork-path.cwl
-- disable: false
-  doc: Test single step workflow with Scatter step and two data links connected to
+- doc: Test single step workflow with Scatter step and two data links connected to
     same input, flattened merge behavior. Workflow inputs are set as list
   id: 114
   job: v1.2/count-lines6-job.json
   label: wf_scatter_twopar_oneinput_flattenedmerge
-  reason: null
   tool: v1.2/count-lines12-wf.cwl
-- disable: false
-  doc: Test step input with multiple sources with multiple types
+- doc: Test step input with multiple sources with multiple types
   id: 115
   job: v1.2/sum-job.json
   label: wf_multiplesources_multipletypes
-  reason: null
   tool: v1.2/sum-wf.cwl
-- disable: false
-  doc: Test that shell directives are not interpreted.
+- doc: Test that shell directives are not interpreted.
   id: 116
   job: v1.2/empty.json
   label: shelldir_notinterpreted
-  reason: null
   tool: v1.2/shellchar.cwl
-- disable: false
-  doc: Test that shell directives are quoted.
+- doc: Test that shell directives are quoted.
   id: 117
   job: v1.2/empty.json
   label: shelldir_quoted
-  reason: null
   tool: v1.2/shellchar2.cwl
-- disable: false
-  doc: Test empty writable dir with InitialWorkDirRequirement
+- doc: Test empty writable dir with InitialWorkDirRequirement
   id: 118
   job: v1.2/empty.json
   label: initial_workdir_empty_writable
-  reason: null
   tool: v1.2/writable-dir.cwl
-- disable: false
-  doc: Test empty writable dir with InitialWorkDirRequirement inside Docker
+- doc: Test empty writable dir with InitialWorkDirRequirement inside Docker
   id: 119
   job: v1.2/empty.json
   label: initial_workdir_empty_writable_docker
-  reason: null
   tool: v1.2/writable-dir-docker.cwl
-- disable: false
-  doc: Test dynamic resource reqs referencing inputs
+- doc: Test dynamic resource reqs referencing inputs
   id: 120
   job: v1.2/dynresreq-job.yaml
   label: dynamic_resreq_inputs
-  reason: null
   tool: v1.2/dynresreq.cwl
-- disable: false
-  doc: Test file literal as input without Docker
+- doc: Test file literal as input without Docker
   id: 121
   job: v1.2/file-literal.yml
   label: fileliteral_input_docker
-  reason: null
   tool: v1.2/cat3-nodocker.cwl
-- disable: false
-  doc: Test that OutputBinding.glob is sorted as specified by POSIX
+- doc: Test that OutputBinding.glob is sorted as specified by POSIX
   id: 122
   job: v1.2/empty.json
   label: outputbinding_glob_sorted
-  reason: null
   tool: v1.2/glob_test.cwl
-- disable: false
-  doc: Test InitialWorkDirRequirement with a nested directory structure from another
+- doc: Test InitialWorkDirRequirement with a nested directory structure from another
     step
   id: 123
   job: v1.2/empty.json
   label: initialworkdir_nesteddir
-  reason: null
   tool: v1.2/iwdr_with_nested_dirs.cwl
-- disable: false
-  doc: Test that boolean flags do not appear on command line if inputBinding is empty
+- doc: Test that boolean flags do not appear on command line if inputBinding is empty
     and not null
   id: 124
   job: v1.2/bool-empty-inputbinding-job.json
   label: booleanflags_cl_noinputbinding
-  reason: null
   tool: v1.2/bool-empty-inputbinding.cwl
-- disable: false
-  doc: Test that expression engine does not fail to evaluate reference to self with
+- doc: Test that expression engine does not fail to evaluate reference to self with
     unprovided input
   id: 125
   job: v1.2/empty.json
   label: expr_reference_self_noinput
-  reason: null
   tool: v1.2/stage-unprovided-file.cwl
-- disable: false
-  doc: Test successCodes
+- doc: Test successCodes
   id: 126
   job: v1.2/empty.json
   label: success_codes
-  reason: null
   tool: v1.2/exit-success.cwl
-- disable: false
-  doc: Test simple workflow with a dynamic resource requirement
+- doc: Test simple workflow with a dynamic resource requirement
   id: 127
   job: v1.2/dynresreq-job.yaml
   label: dynamic_resreq_wf
-  reason: null
   tool: v1.2/dynresreq-workflow.cwl
-- disable: false
-  doc: Test that empty array input does not add anything to command line
+- doc: Test that empty array input does not add anything to command line
   id: 128
   job: v1.2/empty-array-job.json
   label: cl_empty_array_input
-  reason: null
   tool: v1.2/empty-array-input.cwl
-- disable: false
-  doc: Test that ResourceRequirement on a step level redefines requirement on the
+- doc: Test that ResourceRequirement on a step level redefines requirement on the
     workflow level
   id: 129
   job: v1.2/empty.json
   label: resreq_step_overrides_wf
-  reason: null
   tool: v1.2/steplevel-resreq.cwl
-- disable: false
-  doc: Test valueFrom with constant value overriding provided array inputs
+- doc: Test valueFrom with constant value overriding provided array inputs
   id: 130
   job: v1.2/array-of-strings-job.yml
   label: valuefrom_constant_overrides_inputs
-  reason: null
   tool: v1.2/valueFrom-constant.cwl
-- disable: false
-  doc: Test dynamic resource reqs referencing the size of Files inside a Directory
+- doc: Test dynamic resource reqs referencing the size of Files inside a Directory
   id: 131
   job: v1.2/dynresreq-dir-job.yaml
   label: dynamic_resreq_filesizes
-  reason: null
   tool: v1.2/dynresreq-dir.cwl
-- disable: false
-  doc: Test that it is not an error to connect a parameter to a workflow step, even
+- doc: Test that it is not an error to connect a parameter to a workflow step, even
     if the parameter doesn't appear in the `run` process inputs.
   id: 132
   job: v1.2/empty.json
   label: wf_step_connect_undeclared_param
-  reason: null
   tool: v1.2/pass-unconnected.cwl
-- disable: false
-  doc: Test that parameters that don't appear in the `run` process inputs are not
+- doc: Test that parameters that don't appear in the `run` process inputs are not
     present in the input object used to run the tool.
   id: 133
   job: v1.2/empty.json
   label: wf_step_access_undeclared_param
-  reason: null
   tool: v1.2/fail-unconnected.cwl
-- disable: false
-  doc: Test $HOME and $TMPDIR are set correctly in Docker without using return code
+- doc: Test $HOME and $TMPDIR are set correctly in Docker without using return code
   id: 134
   job: v1.2/empty.json
   label: env_home_tmpdir_docker_no_return_code
-  reason: null
   tool: v1.2/envvar3.cwl
-- disable: false
-  doc: Test workflow scatter with single scatter parameter and two valueFrom using
+- doc: Test workflow scatter with single scatter parameter and two valueFrom using
     $inputs (first and current el)
   id: 135
   job: v1.2/scatter-valuefrom-job1.json
   label: wf_scatter_oneparam_valuefrom_inputs
-  reason: null
   tool: v1.2/scatter-valuefrom-inputs-wf1.cwl
-- disable: true
-  doc: SchemaDefRequirement with $import, and packed
+- doc: SchemaDefRequirement with $import, and packed
   id: 136
   job: v1.2/import_schema-def_job.yml
   label: packed_import_schema
-  reason: "input's type has capture_kit"
   tool: v1.2/import_schema-def_packed.cwl
-- disable: false
-  doc: Test specifying secondaryFiles in subdirectories of the job input document.
+- doc: Test specifying secondaryFiles in subdirectories of the job input document.
   id: 137
   job: v1.2/dir4-subdir-1-job.yml
   label: job_input_secondary_subdirs
-  reason: null
   tool: v1.2/dir4.cwl
-- disable: false
-  doc: Test specifying secondaryFiles in same subdirectory of the job input as the
+- doc: Test specifying secondaryFiles in same subdirectory of the job input as the
     primary input file.
   id: 138
   job: v1.2/dir4-subdir-2-job.yml
   label: job_input_subdir_primary_and_secondary_subdirs
-  reason: null
   tool: v1.2/dir4.cwl
-- disable: false
-  doc: Test simple scatter over an embedded subworkflow
+- doc: Test simple scatter over an embedded subworkflow
   id: 139
   job: v1.2/count-lines3-job.json
   label: scatter_embedded_subworkflow
-  reason: null
   tool: v1.2/count-lines18-wf.cwl
-- disable: false
-  doc: Test simple multiple input scatter over an embedded subworkflow
+- doc: Test simple multiple input scatter over an embedded subworkflow
   id: 140
   job: v1.2/count-lines4-job.json
   label: scatter_multi_input_embedded_subworkflow
-  reason: null
   tool: v1.2/count-lines14-wf.cwl
-- disable: false
-  doc: Test twice nested subworkflow
+- doc: Test twice nested subworkflow
   id: 141
   job: v1.2/wc-job.json
   label: workflow_embedded_subworkflow_embedded_subsubworkflow
-  reason: null
   tool: v1.2/count-lines15-wf.cwl
-- disable: false
-  doc: Test subworkflow of mixed depth with tool first
+- doc: Test subworkflow of mixed depth with tool first
   id: 142
   job: v1.2/wc-job.json
   label: workflow_embedded_subworkflow_with_tool_and_subsubworkflow
-  reason: null
   tool: v1.2/count-lines16-wf.cwl
-- disable: false
-  doc: Test subworkflow of mixed depth with tool after
+- doc: Test subworkflow of mixed depth with tool after
   id: 143
   job: v1.2/wc-job.json
   label: workflow_embedded_subworkflow_with_subsubworkflow_and_tool
-  reason: null
   tool: v1.2/count-lines17-wf.cwl
-- disable: false
-  doc: Test record type inputs to and outputs from workflows.
+- doc: Test record type inputs to and outputs from workflows.
   id: 144
   job: v1.2/record-output-job.json
   label: workflow_records_inputs_and_outputs
-  reason: null
   tool: v1.2/record-output-wf.cwl
-- disable: false
-  doc: Test integer workflow input and outputs
+- doc: Test integer workflow input and outputs
   id: 145
   job: v1.2/io-int.json
   label: workflow_integer_input
-  reason: null
   tool: v1.2/io-int-wf.cwl
-- disable: false
-  doc: Test optional integer workflow inputs (specified)
+- doc: Test optional integer workflow inputs (specified)
   id: 146
   job: v1.2/io-int.json
   label: workflow_integer_input_optional_specified
-  reason: null
   tool: v1.2/io-int-optional-wf.cwl
-- disable: false
-  doc: Test optional integer workflow inputs (unspecified)
+- doc: Test optional integer workflow inputs (unspecified)
   id: 147
   job: v1.2/empty.json
   label: workflow_integer_input_optional_unspecified
-  reason: null
   tool: v1.2/io-int-optional-wf.cwl
-- disable: false
-  doc: Test default integer workflow inputs (specified)
+- doc: Test default integer workflow inputs (specified)
   id: 148
   job: v1.2/io-int.json
   label: workflow_integer_input_default_specified
-  reason: null
   tool: v1.2/io-int-default-wf.cwl
-- disable: false
-  doc: Test default integer workflow inputs (unspecified)
+- doc: Test default integer workflow inputs (unspecified)
   id: 149
   job: v1.2/empty.json
   label: workflow_integer_input_default_unspecified
-  reason: null
   tool: v1.2/io-int-default-wf.cwl
-- disable: false
-  doc: Test default integer tool and workflow inputs (unspecified)
+- doc: Test default integer tool and workflow inputs (unspecified)
   id: 150
   job: v1.2/empty.json
   label: workflow_integer_input_default_and_tool_integer_input_default
-  reason: null
   tool: v1.2/io-int-default-tool-and-wf.cwl
-- disable: false
-  doc: Test File input with default unspecified to workflow
+- doc: Test File input with default unspecified to workflow
   id: 151
   job: v1.2/empty.json
   label: workflow_file_input_default_unspecified
-  reason: null
   tool: v1.2/io-file-default-wf.cwl
-- disable: false
-  doc: Test File input with default specified to workflow
+- doc: Test File input with default specified to workflow
   id: 152
   job: v1.2/default_path_job.yml
   label: workflow_file_input_default_specified
-  reason: null
   tool: v1.2/io-file-default-wf.cwl
-- disable: false
-  doc: Test input union type or File or File array to a tool with one file in array
+- doc: Test input union type or File or File array to a tool with one file in array
     specified.
   id: 153
   job: v1.2/job-input-array-one-empty-file.json
   label: clt_optional_union_input_file_or_files_with_array_of_one_file_provided
-  reason: null
   tool: v1.2/io-file-or-files.cwl
-- disable: false
-  doc: Test input union type or File or File array to a tool with a few files in array
+- doc: Test input union type or File or File array to a tool with a few files in array
     specified.
   id: 154
   job: v1.2/job-input-array-few-files.json
   label: clt_optional_union_input_file_or_files_with_many_files_provided
-  reason: null
   tool: v1.2/io-file-or-files.cwl
-- disable: false
-  doc: Test input union type or File or File array to a tool with one file specified.
+- doc: Test input union type or File or File array to a tool with one file specified.
   id: 155
   job: v1.2/job-input-one-file.json
   label: clt_optional_union_input_file_or_files_with_single_file_provided
-  reason: null
   tool: v1.2/io-file-or-files.cwl
-- disable: false
-  doc: Test input union type or File or File array to a tool with null specified.
+- doc: Test input union type or File or File array to a tool with null specified.
   id: 156
   job: v1.2/job-input-null.json
   label: clt_optional_union_input_file_or_files_with_nothing_provided
-  reason: null
   tool: v1.2/io-file-or-files.cwl
-- disable: false
-  doc: Test Any parameter with integer input to a tool
+- doc: Test Any parameter with integer input to a tool
   id: 157
   job: v1.2/io-any-int.json
   label: clt_any_input_with_integer_provided
-  reason: null
   tool: v1.2/io-any-1.cwl
-- disable: false
-  doc: Test Any parameter with string input to a tool
+- doc: Test Any parameter with string input to a tool
   id: 158
   job: v1.2/io-any-string.json
   label: clt_any_input_with_string_provided
-  reason: null
   tool: v1.2/io-any-1.cwl
-- disable: false
-  doc: Test Any parameter with file input to a tool
+- doc: Test Any parameter with file input to a tool
   id: 159
   job: v1.2/io-any-file.json
   label: clt_any_input_with_file_provided
-  reason: null
   tool: v1.2/io-any-1.cwl
-- disable: false
-  doc: Test Any parameter with array input to a tool
+- doc: Test Any parameter with array input to a tool
   id: 160
   job: v1.2/io-any-array.json
   label: clt_any_input_with_mixed_array_provided
-  reason: null
   tool: v1.2/io-any-1.cwl
-- disable: false
-  doc: Test Any parameter with record input to a tool
+- doc: Test Any parameter with record input to a tool
   id: 161
   job: v1.2/io-any-record.json
   label: clt_any_input_with_record_provided
-  reason: null
   tool: v1.2/io-any-1.cwl
-- disable: false
-  doc: Test Any parameter with integer input to a workflow
+- doc: Test Any parameter with integer input to a workflow
   id: 162
   job: v1.2/io-any-int.json
   label: workflow_any_input_with_integer_provided
-  reason: null
   tool: v1.2/io-any-wf-1.cwl
-- disable: false
-  doc: Test Any parameter with string input to a workflow
+- doc: Test Any parameter with string input to a workflow
   id: 163
   job: v1.2/io-any-string.json
   label: workflow_any_input_with_string_provided
-  reason: null
   tool: v1.2/io-any-wf-1.cwl
-- disable: false
-  doc: Test Any parameter with file input to a workflow
+- doc: Test Any parameter with file input to a workflow
   id: 164
   job: v1.2/io-any-file.json
   label: workflow_any_input_with_file_provided
-  reason: null
   tool: v1.2/io-any-wf-1.cwl
-- disable: false
-  doc: Test Any parameter with array input to a workflow
+- doc: Test Any parameter with array input to a workflow
   id: 165
   job: v1.2/io-any-array.json
   label: workflow_any_input_with_mixed_array_provided
-  reason: null
   tool: v1.2/io-any-wf-1.cwl
-- disable: false
-  doc: Test Any parameter with record input to a tool
+- doc: Test Any parameter with record input to a tool
   id: 166
   job: v1.2/io-any-record.json
   label: workflow_any_input_with_record_provided
-  reason: null
   tool: v1.2/io-any-wf-1.cwl
-- disable: false
-  doc: Test union type input to workflow with default unspecified
+- doc: Test union type input to workflow with default unspecified
   id: 167
   job: v1.2/empty.json
   label: workflow_union_default_input_unspecified
-  reason: null
   tool: v1.2/io-union-input-default-wf.cwl
-- disable: false
-  doc: Test union type input to workflow with default specified as file
+- doc: Test union type input to workflow with default specified as file
   id: 168
   job: v1.2/io-any-file.json
   label: workflow_union_default_input_with_file_provided
-  reason: null
   tool: v1.2/io-union-input-default-wf.cwl
-- disable: false
-  doc: Test valueFrom on workflow step from literal (string).
+- doc: Test valueFrom on workflow step from literal (string).
   id: 169
   job: v1.2/empty.json
   label: workflowstep_valuefrom_string
-  reason: null
   tool: v1.2/step-valuefrom4-wf.cwl
-- disable: false
-  doc: Test valueFrom on workflow step using basename.
+- doc: Test valueFrom on workflow step using basename.
   id: 170
   job: v1.2/wc-job.json
   label: workflowstep_valuefrom_file_basename
-  reason: null
   tool: v1.2/step-valuefrom5-wf.cwl
-- disable: false
-  doc: Test output arrays in a tool (with ints).
+- doc: Test output arrays in a tool (with ints).
   id: 171
   job: v1.2/output-arrays-int-job.json
   label: expression_tool_int_array_output
-  reason: null
   tool: v1.2/output-arrays-int.cwl
-- disable: false
-  doc: Test output arrays in a workflow (with ints).
+- doc: Test output arrays in a workflow (with ints).
   id: 172
   job: v1.2/output-arrays-int-job.json
   label: workflowstep_int_array_input_output
-  reason: null
   tool: v1.2/output-arrays-int-wf.cwl
-- disable: false
-  doc: Test output arrays in a workflow (with Files).
+- doc: Test output arrays in a workflow (with Files).
   id: 173
   job: v1.2/output-arrays-file-job.json
   label: workflow_file_array_output
-  reason: null
   tool: v1.2/output-arrays-file-wf.cwl
-- disable: false
-  doc: Test Docker ENTRYPOINT usage
+- doc: Test Docker ENTRYPOINT usage
   id: 174
   job: v1.2/empty.json
   label: docker_entrypoint
-  reason: null
   tool: v1.2/docker-run-cmd.cwl
-- disable: false
-  doc: Test use of size in expressions for an empty file
+- doc: Test use of size in expressions for an empty file
   id: 175
   job: v1.2/job-input-array-one-empty-file.json
   label: clt_file_size_property_with_empty_file
-  reason: null
   tool: v1.2/size-expression-tool.cwl
-- disable: false
-  doc: Test use of size in expressions for a few files
+- doc: Test use of size in expressions for a few files
   id: 176
   job: v1.2/job-input-array-few-files.json
   label: clt_file_size_property_with_multi_file
-  reason: null
   tool: v1.2/size-expression-tool.cwl
-- disable: false
-  doc: Test Any without defaults, unspecified, should fail.
+- doc: Test Any without defaults, unspecified, should fail.
   id: 177
   job: v1.2/null-expression-echo-job.json
   label: any_without_defaults_unspecified_fails
-  reason: null
   tool: v1.2/echo-tool.cwl
-- disable: false
-  doc: Test Any without defaults, specified, should fail.
+- doc: Test Any without defaults, specified, should fail.
   id: 178
   job: v1.2/null-expression1-job.json
   label: any_without_defaults_specified_fails
-  reason: null
   tool: v1.2/echo-tool.cwl
-- disable: false
-  doc: Test default value on step input parameter, no ExpressionTool
+- doc: Test default value on step input parameter, no ExpressionTool
   id: 179
   job: v1.2/empty.json
   label: step_input_default_value_noexp
-  reason: null
   tool: v1.2/count-lines9-wf-noET.cwl
-- disable: false
-  doc: Test default value on step input parameter overridden by provided source, no
+- doc: Test default value on step input parameter overridden by provided source, no
     ExpressionTool
   id: 180
   job: v1.2/cat-job.json
   label: step_input_default_value_overriden_noexp
-  reason: null
   tool: v1.2/count-lines11-wf-noET.cwl
-- disable: false
-  doc: Test nested workflow, without ExpressionTool
+- doc: Test nested workflow, without ExpressionTool
   id: 181
   job: v1.2/wc-job.json
   label: nested_workflow_noexp
-  reason: null
   tool: v1.2/count-lines8-wf-noET.cwl
-- disable: false
-  doc: Test step input with multiple sources with multiple types, without ExpressionTool
+- doc: Test step input with multiple sources with multiple types, without ExpressionTool
   id: 182
   job: v1.2/sum-job.json
   label: wf_multiplesources_multipletypes_noexp
-  reason: null
   tool: v1.2/sum-wf-noET.cwl
-- disable: false
-  doc: Within a workflow, test accessing the size attribute of an optional input File
+- doc: Within a workflow, test accessing the size attribute of an optional input File
     as part of a CommandLineTool's ResourceRequirement calculation. The CommandLineTool
     input has a default value (a local file) and the workflow nor the workflow step
     does not provide any value for this input.
   id: 183
   job: v1.2/empty.json
   label: dynamic_resreq_wf_optional_file_default
-  reason: null
   tool: v1.2/dynresreq-workflow-tooldefault.cwl
-- disable: false
-  doc: Within a workflow, test accessing the size attribute of an optional input File
+- doc: Within a workflow, test accessing the size attribute of an optional input File
     as part of a CommandLineTool's ResourceRequirement calculation. The workflow step
     provides a default value (a local file) for this input and the workflow itself
     does not provide any value for this input.
   id: 184
   job: v1.2/empty.json
   label: dynamic_resreq_wf_optional_file_step_default
-  reason: null
   tool: v1.2/dynresreq-workflow-stepdefault.cwl
-- disable: false
-  doc: Within a workflow, test accessing the size attribute of an optional input File
+- doc: Within a workflow, test accessing the size attribute of an optional input File
     as part of a CommandLineTool's ResourceRequirement calculation. The workflow itelf
     provides a default value (a local file) for this input.
   id: 185
   job: v1.2/empty.json
   label: dynamic_resreq_wf_optional_file_wf_default
-  reason: null
   tool: v1.2/dynresreq-workflow-inputdefault.cwl
-- disable: false
-  doc: Test default value on step input parameter overridden by provided source. With
+- doc: Test default value on step input parameter overridden by provided source. With
     passthrough first step
   id: 186
   job: v1.2/cat-job.json
   label: step_input_default_value_overriden_2nd_step
-  reason: null
   tool: v1.2/count-lines11-extra-step-wf.cwl
-- disable: false
-  doc: Test default value on step input parameter overridden by provided source. With
+- doc: Test default value on step input parameter overridden by provided source. With
     passthrough first step and no ExpressionTool
   id: 187
   job: v1.2/cat-job.json
   label: step_input_default_value_overriden_2nd_step_noexp
-  reason: null
   tool: v1.2/count-lines11-extra-step-wf-noET.cwl
-- disable: false
-  doc: Test default value on step input parameter overridden by provided source. With
+- doc: Test default value on step input parameter overridden by provided source. With
     null producing first step
   id: 188
   job: v1.2/empty.json
   label: step_input_default_value_overriden_2nd_step_null
-  reason: null
   tool: v1.2/count-lines11-null-step-wf.cwl
-- disable: false
-  doc: Test default value on step input parameter overridden by provided source. With
+- doc: Test default value on step input parameter overridden by provided source. With
     null producing first step and no ExpressionTool
   id: 189
   job: v1.2/empty.json
   label: step_input_default_value_overriden_2nd_step_null_noexp
-  reason: null
   tool: v1.2/count-lines11-null-step-wf-noET.cwl
-- disable: false
-  doc: Pipe to stdin from user provided local File via a Directory literal
+- doc: Pipe to stdin from user provided local File via a Directory literal
   id: 190
   job: v1.2/cat-from-dir-job.yaml
   label: stdin_from_directory_literal_with_local_file
-  reason: null
   tool: v1.2/cat-from-dir.cwl
-- disable: false
-  doc: Pipe to stdin from literal File via a Directory literal
+- doc: Pipe to stdin from literal File via a Directory literal
   id: 191
   job: v1.2/cat-from-dir-with-literal-file.yaml
   label: stdin_from_directory_literal_with_literal_file
-  reason: null
   tool: v1.2/cat-from-dir.cwl
-- disable: false
-  doc: Test non-stdin reference to literal File via a Directory literal
+- doc: Test non-stdin reference to literal File via a Directory literal
   id: 192
   job: v1.2/cat-from-dir-with-literal-file.yaml
   label: directory_literal_with_literal_file_nostdin
-  reason: null
   tool: v1.2/cat3-from-dir.cwl
-- disable: false
-  doc: Test CommandLineTool without inputs
+- doc: Test CommandLineTool without inputs
   id: 193
   job: ''
   label: no_inputs_commandlinetool
-  reason: null
   tool: v1.2/no-inputs-tool.cwl
-- disable: false
-  doc: Test CommandLineTool without outputs
+- doc: Test CommandLineTool without outputs
   id: 194
   job: v1.2/cat-job.json
   label: no_outputs_commandlinetool
-  reason: null
   tool: v1.2/no-outputs-tool.cwl
-- disable: false
-  doc: Test Workflow without inputs
+- doc: Test Workflow without inputs
   id: 195
   job: ''
   label: no_inputs_workflow
-  reason: null
   tool: v1.2/no-inputs-wf.cwl
-- disable: false
-  doc: Test Workflow without outputs
+- doc: Test Workflow without outputs
   id: 196
   job: v1.2/cat-job.json
   label: no_outputs_workflow
-  reason: null
   tool: v1.2/no-outputs-wf.cwl
-- disable: false
-  doc: Test an anonymous enum inside an array inside a record
+- doc: Test an anonymous enum inside an array inside a record
   id: 197
   job: v1.2/anon_enum_inside_array.yml
   label: anonymous_enum_in_array
-  reason: null
   tool: v1.2/anon_enum_inside_array.cwl
-- disable: true
-  doc: Test an anonymous enum inside an array inside a record, SchemaDefRequirement
+- doc: Test an anonymous enum inside an array inside a record, SchemaDefRequirement
   id: 198
   job: v1.2/anon_enum_inside_array_inside_schemadef.yml
   label: schema-def_anonymous_enum_in_array
-  reason: requirements has SchemaDefRequirement
   tool: v1.2/anon_enum_inside_array_inside_schemadef.cwl
-- disable: false
-  doc: Test command execution in with stdin and stdout redirection using stdin shortcut
+- doc: Test command execution in with stdin and stdout redirection using stdin shortcut
   id: 199
   job: v1.2/wc-job.json
   label: stdin_shorcut
-  reason: null
   tool: v1.2/cat-tool-shortcut.cwl
-- disable: false
-  doc: Test secondaryFiles on anonymous record fields
+- doc: Test secondaryFiles on anonymous record fields
   id: 200
   job: v1.2/record-secondaryFiles-job.yml
   label: secondary_files_in_unnamed_records
-  reason: null
   tool: v1.2/record-in-secondaryFiles.cwl
-- disable: true
-  doc: Test secondaryFiles on SchemaDefRequirement record fields
+- doc: Test secondaryFiles on SchemaDefRequirement record fields
   id: 201
   job: v1.2/record-secondaryFiles-job.yml
   label: secondary_files_in_named_records
-  reason: "requirements has SchemaDefRequirement"
   tool: v1.2/record-sd-secondaryFiles.cwl
-- disable: false
-  doc: Test secondaryFiles on output record fields
+- doc: Test secondaryFiles on output record fields
   id: 202
   job: v1.2/empty.json
   label: secondary_files_in_output_records
-  reason: null
   tool: v1.2/record-out-secondaryFiles.cwl
-- disable: false
-  doc: Test secondaryFiles propagation through workflow
+- doc: Test secondaryFiles propagation through workflow
   id: 203
   job: v1.2/record-secondaryFiles-job.yml
   label: secondary_files_workflow_propagation
-  reason: null
   tool: v1.2/record-in-secondaryFiles-wf.cwl
-- disable: false
-  doc: Test checking when secondaryFiles are missing
+- doc: Test checking when secondaryFiles are missing
   id: 204
   job: v1.2/record-secondaryFiles-job.yml
   label: secondary_files_missing
-  reason: null
   tool: v1.2/record-in-secondaryFiles-missing-wf.cwl
-- disable: false
-  doc: Test format on anonymous record fields
+- doc: Test format on anonymous record fields
   id: 205
   job: v1.2/record-format-job.yml
   label: input_records_file_entry_with_format
-  reason: null
   tool: v1.2/record-in-format.cwl
-- disable: false
-  doc: Test file format checking on parameter
+- doc: Test file format checking on parameter
   id: 206
   job: v1.2/record-format-job2.yml
   label: input_records_file_entry_with_format_and_bad_regular_input_file_format
-  reason: null
   tool: v1.2/record-in-format.cwl
-- disable: false
-  doc: Test file format checking on record field
+- doc: Test file format checking on record field
   id: 207
   job: v1.2/record-format-job3.yml
   label: input_records_file_entry_with_format_and_bad_entry_file_format
-  reason: null
   tool: v1.2/record-in-format.cwl
-- disable: false
-  doc: Test file format checking on array item
+- doc: Test file format checking on array item
   id: 208
   job: v1.2/record-format-job4.yml
   label: input_records_file_entry_with_format_and_bad_entry_array_file_format
-  reason: null
   tool: v1.2/record-in-format.cwl
-- disable: false
-  doc: Test format on output record fields
+- doc: Test format on output record fields
   id: 209
   job: v1.2/record-secondaryFiles-job.yml
   label: record_output_file_entry_format
-  reason: null
   tool: v1.2/record-out-format.cwl
-- disable: false
-  doc: Test WorkflowInputParameter.inputBinding.loadContents
+- doc: Test WorkflowInputParameter.inputBinding.loadContents
   id: 210
   job: v1.2/wf-loadContents-job.yml
   label: workflow_input_inputBinding_loadContents
-  reason: null
   tool: v1.2/wf-loadContents.cwl
-- disable: false
-  doc: Test WorkflowInputParameter.loadContents
+- doc: Test WorkflowInputParameter.loadContents
   id: 211
   job: v1.2/wf-loadContents-job.yml
   label: workflow_input_loadContents_without_inputBinding
-  reason: null
   tool: v1.2/wf-loadContents2.cwl
-- disable: false
-  doc: Test loadContents on InputParameter.loadContents (expression)
+- doc: Test loadContents on InputParameter.loadContents (expression)
   id: 212
   job: v1.2/wf-loadContents-job.yml
   label: expression_tool_input_loadContents
-  reason: null
   tool: v1.2/wf-loadContents3.cwl
-- disable: false
-  doc: Test WorkflowStepInput.loadContents
+- doc: Test WorkflowStepInput.loadContents
   id: 213
   job: v1.2/wf-loadContents-job.yml
   label: workflow_step_in_loadContents
-  reason: null
   tool: v1.2/wf-loadContents4.cwl
-- disable: false
-  doc: Test that job fails when exceeding time limit
+- doc: Test that job fails when exceeding time limit
   id: 214
   job: v1.2/empty.json
   label: timelimit_basic
-  reason: null
   tool: v1.2/timelimit.cwl
-- disable: false
-  doc: Test invalid time limit value
+- doc: Test invalid time limit value
   id: 215
   job: v1.2/empty.json
   label: timelimit_invalid
-  reason: null
   tool: v1.2/timelimit2.cwl
-- disable: false
-  doc: Test zero timelimit means no limit
+- doc: Test zero timelimit means no limit
   id: 216
   job: v1.2/empty.json
   label: timelimit_zero_unlimited
-  reason: null
   tool: v1.2/timelimit3.cwl
-- disable: false
-  doc: Test expression in time limit
+- doc: Test expression in time limit
   id: 217
   job: v1.2/empty.json
   label: timelimit_from_expression
-  reason: null
   tool: v1.2/timelimit4.cwl
-- disable: false
-  doc: Test timelimit in expressiontool is ignored
+- doc: Test timelimit in expressiontool is ignored
   id: 218
   job: v1.2/empty.json
   label: timelimit_expressiontool
-  reason: null
   tool: v1.2/timelimit5.cwl
-- disable: false
-  doc: Test that tool in workflow fails when exceeding time limit
+- doc: Test that tool in workflow fails when exceeding time limit
   id: 219
   job: v1.2/empty.json
   label: timelimit_basic_wf
-  reason: null
   tool: v1.2/timelimit-wf.cwl
-- disable: false
-  doc: Test that workflow level time limit is not applied to workflow execution time
+- doc: Test that workflow level time limit is not applied to workflow execution time
   id: 220
   job: v1.2/empty.json
   label: timelimit_invalid_wf
-  reason: null
   tool: v1.2/timelimit2-wf.cwl
-- disable: false
-  doc: Test zero timelimit means no limit in workflow
+- doc: Test zero timelimit means no limit in workflow
   id: 221
   job: v1.2/empty.json
   label: timelimit_zero_unlimited_wf
-  reason: null
   tool: v1.2/timelimit3-wf.cwl
-- disable: false
-  doc: Test expression in time limit in workflow
+- doc: Test expression in time limit in workflow
   id: 222
   job: v1.2/empty.json
   label: timelimit_from_expression_wf
-  reason: null
   tool: v1.2/timelimit4-wf.cwl
-- disable: false
-  doc: Test networkaccess enabled
+- doc: Test networkaccess enabled
   id: 223
   job: v1.2/empty.json
   label: networkaccess
-  reason: null
   tool: v1.2/networkaccess.cwl
-- disable: false
-  doc: Test networkaccess is disabled by default
+- doc: Test networkaccess is disabled by default
   id: 224
   job: v1.2/empty.json
   label: networkaccess_disabled
-  reason: null
   tool: v1.2/networkaccess2.cwl
-- disable: false
-  doc: Test null and array input in InitialWorkDirRequirement
+- doc: Test null and array input in InitialWorkDirRequirement
   id: 225
   job: v1.2/stage-array-job.json
   label: ''
-  reason: null
   tool: v1.2/stage-array.cwl
-- disable: false
-  doc: Test array of directories InitialWorkDirRequirement
+- doc: Test array of directories InitialWorkDirRequirement
   id: 226
   job: v1.2/stage-array-dirs-job.yml
   label: ''
-  reason: null
   tool: v1.2/stage-array-dirs.cwl
-- disable: false
-  doc: Test requirements in input document via EnvVarRequirement
+- doc: Test requirements in input document via EnvVarRequirement
   id: 227
   job: v1.2/env-job3.yaml
   label: cwl_requirements_addition
-  reason: null
   tool: v1.2/env-tool3.cwl
-- disable: false
-  doc: Test conflicting requirements in input document via EnvVarRequirement and expression
+- doc: Test conflicting requirements in input document via EnvVarRequirement and expression
   id: 228
   job: v1.2/env-job3.yaml
   label: cwl_requirements_override_expression
-  reason: null
   tool: v1.2/env-tool4.cwl
-- disable: false
-  doc: Test conflicting requirements in input document via EnvVarRequirement
+- doc: Test conflicting requirements in input document via EnvVarRequirement
   id: 229
   job: v1.2/env-job4.yaml
   label: cwl_requirements_override_static
-  reason: null
   tool: v1.2/env-tool3.cwl
-- disable: false
-  doc: Test full path glob output of InitialWorkDir
+- doc: Test full path glob output of InitialWorkDir
   id: 230
   job: v1.2/initialworkdirrequirement-docker-out-job.json
   label: initial_workdir_output_glob
-  reason: null
   tool: v1.2/initialworkdir-glob-fullpath.cwl
-- disable: false
-  doc: Test full path glob output of InitialWorkDir (duplicate)
+- doc: Test full path glob output of InitialWorkDir (duplicate)
   id: 231
   job: v1.2/initialworkdirrequirement-docker-out-job.json
   label: initial_workdir_output_glob_duplicate
-  reason: null
   tool: v1.2/initialworkdir-glob-fullpath.cwl
-- disable: false
-  doc: Test fail trying to glob outside output directory
+- doc: Test fail trying to glob outside output directory
   id: 232
   job: v1.2/empty.json
   label: glob_outside_outputs_fails
-  reason: null
   tool: v1.2/glob-path-error.cwl
-- disable: false
-  doc: symlink to file outside of working directory should NOT be retrieved
+- doc: symlink to file outside of working directory should NOT be retrieved
   id: 233
   job: v1.2/empty.json
   label: ''
-  reason: null
   tool: v1.2/symlink-illegal.cwl
-- disable: false
-  doc: symlink to file inside of working directory should be retrieved
+- doc: symlink to file inside of working directory should be retrieved
   id: 234
   job: v1.2/empty.json
   label: ''
-  reason: null
   tool: v1.2/symlink-legal.cwl
-- disable: false
-  doc: inplace update has side effect on file content
+- doc: inplace update has side effect on file content
   id: 235
   job: v1.2/empty.json
   label: ''
-  reason: null
   tool: v1.2/inp_update_wf.cwl
-- disable: false
-  doc: inplace update has side effect on directory content
+- doc: inplace update has side effect on directory content
   id: 236
   job: v1.2/empty.json
   label: ''
-  reason: null
   tool: v1.2/inpdir_update_wf.cwl
-- disable: false
-  doc: Test that OutputBinding.glob accepts Directories
+- doc: Test that OutputBinding.glob accepts Directories
   id: 237
   job: v1.2/empty.json
   label: outputbinding_glob_directory
-  reason: null
   tool: v1.2/glob_directory.cwl
-- disable: false
-  doc: Test that array of input files can be staged to directory with entryname
+- doc: Test that array of input files can be staged to directory with entryname
   id: 238
   job: v1.2/stage_file_array.job.json
   label: stage_file_array
-  reason: null
   tool: v1.2/stage_file_array.cwl
-- disable: false
-  doc: Test that array of input files can be staged to directory with basename
+- doc: Test that array of input files can be staged to directory with basename
   id: 239
   job: v1.2/stage_file_array.job.json
   label: stage_file_array_basename
-  reason: null
   tool: v1.2/stage_file_array_basename.cwl
-- disable: false
-  doc: Test that if array of input files are staged to directory with basename and
+- doc: Test that if array of input files are staged to directory with basename and
     entryname, entryname overrides
   id: 240
   job: v1.2/stage_file_array.job.json
   label: stage_file_array_entryname_overrides
-  reason: null
   tool: v1.2/stage_file_array_basename_and_entryname.cwl
-- disable: false
-  doc: Test that runtime.tmpdir is not runtime.outdir
+- doc: Test that runtime.tmpdir is not runtime.outdir
   id: 241
   job: v1.2/empty.json
   label: tmpdir_is_not_outdir
-  reason: null
   tool: v1.2/runtime-paths-distinct.cwl
-- disable: false
-  doc: Test that default behavior is 'no_listing' if not specified
+- doc: Test that default behavior is 'no_listing' if not specified
   id: 242
   job: v1.2/listing-job.yml
   label: listing_default_none
-  reason: null
   tool: v1.2/listing_none1.cwl
-- disable: false
-  doc: Test that 'listing' is not present when LoadListingRequirement is 'no_listing'
+- doc: Test that 'listing' is not present when LoadListingRequirement is 'no_listing'
   id: 243
   job: v1.2/listing-job.yml
   label: listing_requirement_none
-  reason: null
   tool: v1.2/listing_none2.cwl
-- disable: false
-  doc: Test that 'listing' is not present when loadListing on input parameter is 'no_listing'
+- doc: Test that 'listing' is not present when loadListing on input parameter is 'no_listing'
   id: 244
   job: v1.2/listing-job.yml
   label: listing_loadListing_none
-  reason: null
   tool: v1.2/listing_none3.cwl
-- disable: false
-  doc: Test that 'listing' is present in top directory object but not subdirectory
+- doc: Test that 'listing' is present in top directory object but not subdirectory
     object when LoadListingRequirement is 'shallow_listing'
   id: 245
   job: v1.2/listing-job.yml
   label: listing_requirement_shallow
-  reason: null
   tool: v1.2/listing_shallow1.cwl
-- disable: false
-  doc: Test that 'listing' is present in top directory object but not subdirectory
+- doc: Test that 'listing' is present in top directory object but not subdirectory
     object when loadListing on input parameter loadListing is 'shallow_listing'
   id: 246
   job: v1.2/listing-job.yml
   label: listing_loadListing_shallow
-  reason: null
   tool: v1.2/listing_shallow2.cwl
-- disable: false
-  doc: Test that loadListing works when used on outputBinding.
+- doc: Test that loadListing works when used on outputBinding.
   id: ''
   job: v1.2/listing-job.yml
   label: listing_outputBinding_loadListing
-  reason: null
   tool: v1.2/listing_shallow3.cwl
-- disable: false
-  doc: Test that 'listing' is present in top directory object and in subdirectory
+- doc: Test that 'listing' is present in top directory object and in subdirectory
     objects when LoadListingRequirement is 'deep_listing'
   id: 247
   job: v1.2/listing-job.yml
   label: listing_requirement_deep
-  reason: null
   tool: v1.2/listing_deep1.cwl
-- disable: false
-  doc: Test that 'listing' is present in top directory object and in subdirectory
+- doc: Test that 'listing' is present in top directory object and in subdirectory
     objects when input parameter loadListing is 'deep_listing'
   id: 248
   job: v1.2/listing-job.yml
   label: listing_loadListing_deep
-  reason: null
   tool: v1.2/listing_deep2.cwl
-- disable: false
-  doc: Test for expression in the InputBinding.position field; also test using emoji
+- doc: Test for expression in the InputBinding.position field; also test using emoji
     in CWL document and tool output
   id: 249
   job: v1.2/echo-position-expr-job.yml
   label: inputBinding_position_expr
-  reason: null
   tool: v1.2/echo-position-expr.cwl
-- disable: false
-  doc: Can access exit code in outputEval
+- doc: Can access exit code in outputEval
   id: 250
   job: v1.2/empty.json
   label: outputEval_exitCode
-  reason: null
   tool: v1.2/exitcode.cwl
-- disable: false
-  doc: Test use of $graph without specifying which process to run
+- doc: Test use of $graph without specifying which process to run
   id: 251
   job: v1.2/env-job.json
   label: any_input_param_graph_no_default
-  reason: null
   tool: v1.2/echo-tool-packed.cwl
-- disable: false
-  doc: Test use of $graph without specifying which process to run, hash-prefixed "main"
+- doc: Test use of $graph without specifying which process to run, hash-prefixed "main"
   id: 252
   job: v1.2/env-job.json
   label: any_input_param_graph_no_default_hashmain
-  reason: null
   tool: v1.2/echo-tool-packed2.cwl
-- disable: false
-  doc: Test that optional number output is returned as 0, not null
+- doc: Test that optional number output is returned as 0, not null
   id: 253
   job: v1.2/empty.json
   label: optional_numerical_output_returns_0_not_null
-  reason: null
   tool: v1.2/optional-numerical-output-0.cwl
-- disable: false
-  doc: Test float value for coresMin(Max) is rounded up in runtime.cores
+- doc: Test float value for coresMin(Max) is rounded up in runtime.cores
   id: 255
   job: v1.2/empty.json
   label: cores_float
-  reason: null
   tool: v1.2/cores_float.cwl
-- disable: false
-  doc: Test float value for ram/tmpdir/outdir Min(Max) is rounded up
+- doc: Test float value for ram/tmpdir/outdir Min(Max) is rounded up
   id: 256
   job: v1.2/empty.json
   label: storage_float
-  reason: null
   tool: v1.2/storage_float.cwl
-- disable: false
-  doc: Test the generation of a synthetic file with inline contents.
+- doc: Test the generation of a synthetic file with inline contents.
   id: 257
   job: v1.2/synth-file-job.yml
   label: cat_synthetic_file
-  reason: null
   tool: v1.2/synth-file.cwl
