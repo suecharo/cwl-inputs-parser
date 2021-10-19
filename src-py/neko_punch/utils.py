@@ -101,7 +101,7 @@ class UnsupportedValueError(Exception):
 class SecondaryFile:
     """SecondaryFile"""
     pattern: Optional[str] = None
-    required: Optional[bool] = None
+    required: Optional[bool] = True
 
 
 @dataclass
@@ -145,17 +145,16 @@ class Neko:
         """Converts a CWL object to a Neko object."""
         for inp_obj in self.cwl_obj.inputs:
             if isinstance(inp_obj.type, str):
-                neko_filed = self.typical_filed(inp_obj)
-                self.results.append(neko_filed)
+                self.results.append(self.typical_field(inp_obj))
             elif isinstance(inp_obj.type, list):
                 if len(inp_obj.type) == 1:
-                    if isinstance(inp_obj.type[0], CommandInputArraySchema):
-                        tmp_obj = deepcopy(inp_obj)
-                        tmp_obj.type = inp_obj.type[0]
+                    tmp_obj = deepcopy(inp_obj)
+                    tmp_obj.type = inp_obj.type[0]
+                    if isinstance(tmp_obj.type, str):
+                        self.results.append(self.typical_field(tmp_obj))
+                    elif isinstance(tmp_obj.type, CommandInputArraySchema):
                         self.results.append(self.command_input_array_field(tmp_obj))  # noqa: E501
-                    elif isinstance(inp_obj.type[0], InputArraySchema):
-                        tmp_obj = deepcopy(inp_obj)
-                        tmp_obj.type = inp_obj.type[0]
+                    elif isinstance(tmp_obj.type, InputArraySchema):
                         self.results.append(self.input_array_field(tmp_obj))
                     else:
                         raise UnsupportedValueError("The type field contains an unsupported format")  # noqa: E501
@@ -165,7 +164,7 @@ class Neko:
                         for t in inp_obj.type:
                             if t != 'null':
                                 tmp_obj.type = t
-                        neko_filed = self.typical_filed(tmp_obj)
+                        neko_filed = self.typical_field(tmp_obj)
                         neko_filed.required = False
                         self.results.append(neko_filed)
                     else:
@@ -175,6 +174,8 @@ class Neko:
                     # [TODO] not support
                     raise UnsupportedValueError("The union field does not support by neko-punch")  # noqa: E501
             elif isinstance(inp_obj.type, CommandInputArraySchema):
+                if inp_obj.type.items not in ["boolean", "int", "string", "File", "Directory", "Any"]:  # noqa: E501
+                    raise UnsupportedValueError("The type field contains an unsupported format")  # noqa: E501
                 self.results.append(self.command_input_array_field(inp_obj))
             elif isinstance(inp_obj.type, CommandInputEnumSchema):
                 # [TODO] not support
@@ -188,8 +189,9 @@ class Neko:
                 if isinstance(inp_obj.type.items, InputRecordSchema):
                     # [TODO] not support
                     raise UnsupportedValueError("The InputRecordSchema field in the InputArraySchema field does not support by neko-punch")  # noqa: E501
-                else:
-                    self.results.append(self.input_array_field(inp_obj))
+                if inp_obj.type.items not in ["boolean", "int", "string", "File", "Directory", "Any"]:  # noqa: E501
+                    raise UnsupportedValueError("The type field contains an unsupported format")  # noqa: E501
+                self.results.append(self.input_array_field(inp_obj))
             elif isinstance(inp_obj.type, InputRecordSchema):
                 # [TODO] not support
                 raise UnsupportedValueError("The InputRecordSchema field does not support by neko-punch")  # noqa: E501
@@ -197,7 +199,7 @@ class Neko:
                 # [TODO] not support
                 raise UnsupportedValueError("The type field contains an unsupported format")  # noqa: E501
 
-    def typical_filed(self, inp_obj: CommandInputParameter) -> NekoField:
+    def typical_field(self, inp_obj: CommandInputParameter) -> NekoField:
         """
         Generates a typical fields
         like: boolean, int, string, File, stdin, Directory, Any
@@ -235,7 +237,7 @@ class Neko:
         if isinstance(id_, str):
             id_ = id_.split("#")[-1]
         return NekoField(
-            default=deepcopy(inp_obj),
+            default=deepcopy(inp_obj.default),
             doc=self.clean_val(inp_obj.doc),
             id=id_,
             label=self.clean_val(inp_obj.label),
@@ -342,13 +344,11 @@ class Neko:
         of the path field to location, and remove the path field.
         """
         result = self.template_field(inp_obj)
-        default = None
         if isinstance(inp_obj.default, OrderedDict) and len(inp_obj.default) != 0:  # noqa: E501
             if "location" in inp_obj.default:
-                default = inp_obj.default["location"]
+                result.default = inp_obj.default["location"]
             elif "path" in inp_obj.default:
-                default = inp_obj.default["path"]
-        result.default = default
+                result.default = inp_obj.default["path"]
         return result
 
     def stdin_field(self, inp_obj: CommandInputParameter) -> NekoField:
@@ -473,7 +473,7 @@ class Neko:
         'required': None}
         """
         result = self.template_field(inp_obj)
-        result.type = "File"
+        result.type = inp_obj.type.items
         result.array = True
         if inp_obj.secondaryFiles:
             result.secondaryFiles = []

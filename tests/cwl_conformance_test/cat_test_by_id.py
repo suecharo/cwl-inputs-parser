@@ -14,7 +14,7 @@ def main():
         sys.exit(1)
     with CONFORMANCE_TEST_PATH.open(mode="r", encoding="utf-8") as f:
         conformance_test = safe_load(f)
-    ids = list(map(str, sys.argv[1:]))
+    ids = [s.strip("[],") for s in map(str, sys.argv[1:])]
     for test in conformance_test:
         if str(test["id"]) in ids:
             print(test["tool"])
