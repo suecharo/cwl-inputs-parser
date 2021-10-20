@@ -10,7 +10,7 @@ from yaml import safe_load
 
 from const import CONFORMANCE_TEST_PATH, CWL_UTILS_OBJ_TEMPLATE
 
-CONFORMANCE_TEST_IDS = [3, 94, 136, 198, 201]
+CONFORMANCE_TEST_IDS = [3, 59, 60, 94, 136, 198, 201]
 
 
 def test_using_conformance_test():

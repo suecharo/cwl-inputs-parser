@@ -8,7 +8,7 @@ from cwl_utils.parser.cwl_v1_2 import (CommandInputArraySchema,
                                        CommandInputEnumSchema,
                                        CommandInputRecordSchema,
                                        InputArraySchema, InputRecordSchema)
-from neko_punch.utils import Neko, extract_main_tool, fetch_document
+from neko_punch.utils import Neko, as_uri, extract_main_tool, fetch_document
 from yaml import safe_load
 
 
@@ -20,7 +20,7 @@ def main():
     for test in tests:
         tool_path = Path(__file__).parent.joinpath(test["tool"])
         try:
-            cwl_obj = extract_main_tool(load_document(fetch_document(tool_path)))  # noqa: E501
+            cwl_obj = extract_main_tool(load_document(fetch_document(tool_path), baseuri=as_uri(tool_path)))  # noqa: E501
         except Exception:
             continue
         try:

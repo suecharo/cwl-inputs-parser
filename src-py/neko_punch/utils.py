@@ -5,6 +5,8 @@ from copy import deepcopy
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, List, NoReturn, Optional, Union, cast
+import os
+
 
 from cwl_utils.parser import load_document
 from cwl_utils.parser.cwl_v1_2 import (CommandInputArraySchema,
@@ -13,7 +15,7 @@ from cwl_utils.parser.cwl_v1_2 import (CommandInputArraySchema,
                                        CommandInputRecordSchema,
                                        CommandLineTool, ExpressionTool,
                                        InputArraySchema, InputRecordSchema,
-                                       Workflow)
+                                       Workflow, file_uri)
 from cwltool.main import CWLObjectType
 from requests import get
 
@@ -82,6 +84,17 @@ def fetch_document(path: Union[str, Path]) -> str:
         return path.open(mode="r", encoding="utf-8").read()
     else:
         return Path().cwd().joinpath(path).read_text(encoding="utf-8")
+
+
+def as_uri(path: Union[str, Path]) -> str:
+    """Converts a path to a URI."""
+    if isinstance(path, str):
+        if is_remote_url(path):
+            return os.path.dirname(path) + "/"
+        path = Path(path)
+    if not path.is_absolute():
+        path = Path().cwd().joinpath(path)
+    return file_uri(str(path.parent)) + "/"
 
 
 def extract_main_tool(cwl_obj: CWLUtilLoadResult) -> CWLUtilObj:
@@ -555,7 +568,7 @@ class Neko:
 def wf_path_to_neko_fields(wf_path: str) -> List[NekoField]:
     """Convert workflow path to neko object."""
     wf_doc = fetch_document(wf_path)
-    cwl_obj: CWLUtilLoadResult = load_document(wf_doc)
+    cwl_obj: CWLUtilLoadResult = load_document(wf_doc, baseuri=as_uri(wf_path))
     neko = Neko(cwl_obj)
     neko.punch()
     return neko.results

@@ -5,7 +5,7 @@ from pathlib import Path
 from pprint import pprint
 
 from cwl_utils.parser import load_document
-from neko_punch.utils import (extract_main_tool, fetch_document,
+from neko_punch.utils import (as_uri, extract_main_tool, fetch_document,
                               wf_path_to_neko_fields)
 from yaml import safe_load
 
@@ -23,7 +23,7 @@ def main():
         if str(test["id"]) in ids:
             print(f"--- {test['id']}: {test['tool']} ---")
             wf_path = Path(__file__).parent.joinpath(test["tool"])  # noqa: E501
-            cwl_obj = extract_main_tool(load_document(fetch_document(wf_path)))
+            cwl_obj = extract_main_tool(load_document(fetch_document(wf_path), baseuri=as_uri(wf_path)))  # noqa: E501
             for inp in cwl_obj.inputs:
                 pprint(inp.__dict__)
                 if isinstance(inp.type, str):
