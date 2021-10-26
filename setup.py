@@ -17,7 +17,7 @@ setup(
     python_requires=">=3.6",
     install_requires=[
         "cwltool",
-        # "cwl-utils",  # not working
+        "cwl-utils @ git+https://github.com/common-workflow-language/cwl-utils.git@d5e0338b7fbeb93f2872f9e2268a4af7e092a57b",  # noqa
         "pyyaml",
         "requests",
     ],
@@ -28,7 +28,8 @@ setup(
             "types-requests",
             "types-setuptools",
             "isort",
-            "pytest"
+            "pytest",
+            "jsonschema",
         ],
     },
     packages=["neko_punch"],
