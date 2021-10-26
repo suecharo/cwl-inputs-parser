@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 # coding: utf-8
+import json
+import os
 from collections import OrderedDict
 from copy import deepcopy
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, List, NoReturn, Optional, Union, cast
-import os
-
 
 from cwl_utils.parser import load_document
 from cwl_utils.parser.cwl_v1_2 import (CommandInputArraySchema,
@@ -156,19 +156,20 @@ class Neko:
 
     def punch(self):
         """Converts a CWL object to a Neko object."""
+        self.results = []
         for inp_obj in self.cwl_obj.inputs:
             if isinstance(inp_obj.type, str):
-                self.results.append(self.typical_field(inp_obj))
+                neko_field = self.typical_field(inp_obj)
             elif isinstance(inp_obj.type, list):
                 if len(inp_obj.type) == 1:
                     tmp_obj = deepcopy(inp_obj)
                     tmp_obj.type = inp_obj.type[0]
                     if isinstance(tmp_obj.type, str):
-                        self.results.append(self.typical_field(tmp_obj))
+                        neko_field = self.typical_field(tmp_obj)
                     elif isinstance(tmp_obj.type, CommandInputArraySchema):
-                        self.results.append(self.command_input_array_field(tmp_obj))  # noqa: E501
+                        neko_field = self.command_input_array_field(tmp_obj)  # noqa: E501
                     elif isinstance(tmp_obj.type, InputArraySchema):
-                        self.results.append(self.input_array_field(tmp_obj))
+                        neko_field = self.input_array_field(tmp_obj)
                     else:
                         raise UnsupportedValueError("The type field contains an unsupported format")  # noqa: E501
                 elif len(inp_obj.type) == 2:
@@ -179,7 +180,7 @@ class Neko:
                                 tmp_obj.type = t
                         neko_filed = self.typical_field(tmp_obj)
                         neko_filed.required = False
-                        self.results.append(neko_filed)
+                        neko_field = neko_filed
                     else:
                         # [TODO] not support
                         raise UnsupportedValueError("The union field does not support by neko-punch")  # noqa: E501
@@ -189,14 +190,14 @@ class Neko:
             elif isinstance(inp_obj.type, CommandInputArraySchema):
                 if inp_obj.type.items not in ["boolean", "int", "string", "File", "Directory", "Any"]:  # noqa: E501
                     raise UnsupportedValueError("The type field contains an unsupported format")  # noqa: E501
-                self.results.append(self.command_input_array_field(inp_obj))
+                neko_field = self.command_input_array_field(inp_obj)
             elif isinstance(inp_obj.type, CommandInputEnumSchema):
                 # [TODO] not support
-                # self.results.append(self.command_input_enum_field(inp_obj))
+                # neko_field = self.command_input_enum_field(inp_obj)
                 raise UnsupportedValueError("The CommandInputEnumSchema field does not support by neko-punch")  # noqa: E501
             elif isinstance(inp_obj.type, CommandInputRecordSchema):
                 # [TODO] not support
-                # self.results.append(self.command_input_record_field(inp_obj))
+                # neko_field = self.command_input_record_field(inp_obj)
                 raise UnsupportedValueError("The CommandInputRecordSchema field does not support by neko-punch")  # noqa: E501
             elif isinstance(inp_obj.type, InputArraySchema):
                 if isinstance(inp_obj.type.items, InputRecordSchema):
@@ -204,13 +205,31 @@ class Neko:
                     raise UnsupportedValueError("The InputRecordSchema field in the InputArraySchema field does not support by neko-punch")  # noqa: E501
                 if inp_obj.type.items not in ["boolean", "int", "string", "File", "Directory", "Any"]:  # noqa: E501
                     raise UnsupportedValueError("The type field contains an unsupported format")  # noqa: E501
-                self.results.append(self.input_array_field(inp_obj))
+                neko_field = self.input_array_field(inp_obj)
             elif isinstance(inp_obj.type, InputRecordSchema):
                 # [TODO] not support
                 raise UnsupportedValueError("The InputRecordSchema field does not support by neko-punch")  # noqa: E501
             else:
                 # [TODO] not support
                 raise UnsupportedValueError("The type field contains an unsupported format")  # noqa: E501
+            if neko_field.type == "File":
+                if inp_obj.secondaryFiles:
+                    neko_field.secondaryFiles = []
+                    for secondary_file in inp_obj.secondaryFiles:
+                        required = secondary_file.required
+                        pattern = secondary_file.pattern
+                        if pattern.endswith("?"):
+                            required = False
+                            pattern = pattern.rstrip("?")
+                        if required is None:
+                            required = True
+                        neko_field.secondaryFiles.append(
+                            SecondaryFile(
+                                pattern=pattern,
+                                required=required
+                            )
+                        )
+            self.results.append(neko_field)
 
     def typical_field(self, inp_obj: CommandInputParameter) -> NekoField:
         """
@@ -488,15 +507,6 @@ class Neko:
         result = self.template_field(inp_obj)
         result.type = inp_obj.type.items
         result.array = True
-        if inp_obj.secondaryFiles:
-            result.secondaryFiles = []
-            for secondary_file in inp_obj.secondaryFiles:
-                result.secondaryFiles.append(
-                    SecondaryFile(
-                        pattern=secondary_file.pattern,
-                        required=secondary_file.required
-                    )
-                )
         return result
 
     def command_input_enum_field(self, inp_obj: CommandInputParameter) -> NoReturn:  # noqa: E501
@@ -572,3 +582,14 @@ def wf_path_to_neko_fields(wf_path: str) -> List[NekoField]:
     neko = Neko(cwl_obj)
     neko.punch()
     return neko.results
+
+
+def dump_json(obj) -> str:
+    """Dump json."""
+    def encode_default(item):
+        if isinstance(item, object) and hasattr(item, '__dict__'):
+            return item.__dict__
+        else:
+            raise TypeError
+
+    return json.dumps(obj, default=encode_default, indent=2)

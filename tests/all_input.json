@@ -1,0 +1,277 @@
+[
+  {
+    "default": null,
+    "doc": "File doc",
+    "id": "file",
+    "label": "File label",
+    "type": "File",
+    "array": false,
+    "required": true,
+    "secondaryFiles": null
+  },
+  {
+    "default": "test.txt",
+    "doc": "File default doc",
+    "id": "file_default",
+    "label": "File default label",
+    "type": "File",
+    "array": false,
+    "required": true,
+    "secondaryFiles": null
+  },
+  {
+    "default": null,
+    "doc": "File array doc",
+    "id": "file_array",
+    "label": "File array label",
+    "type": "File",
+    "array": true,
+    "required": true,
+    "secondaryFiles": null
+  },
+  {
+    "default": null,
+    "doc": "File not require doc",
+    "id": "file_not_require",
+    "label": "File not require label",
+    "type": "File",
+    "array": false,
+    "required": false,
+    "secondaryFiles": null
+  },
+  {
+    "default": null,
+    "doc": "File with secondaryFiles doc",
+    "id": "file_with_secondaryFiles",
+    "label": "File with secondaryFiles label",
+    "type": "File",
+    "array": false,
+    "required": true,
+    "secondaryFiles": [
+      {
+        "pattern": ".foo",
+        "required": true
+      },
+      {
+        "pattern": ".foo",
+        "required": false
+      },
+      {
+        "pattern": ".foo",
+        "required": true
+      },
+      {
+        "pattern": ".foo",
+        "required": false
+      },
+      {
+        "pattern": ".foo",
+        "required": true
+      },
+      {
+        "pattern": ".foo",
+        "required": false
+      }
+    ]
+  },
+  {
+    "default": null,
+    "doc": "Directory doc",
+    "id": "directory",
+    "label": "Directory label",
+    "type": "Directory",
+    "array": false,
+    "required": true,
+    "secondaryFiles": null
+  },
+  {
+    "default": null,
+    "doc": "Directory array doc",
+    "id": "directory_array",
+    "label": "Directory array label",
+    "type": "Directory",
+    "array": true,
+    "required": true,
+    "secondaryFiles": null
+  },
+  {
+    "default": null,
+    "doc": "Directory not require doc",
+    "id": "directory_not_require",
+    "label": "Directory not require label",
+    "type": "Directory",
+    "array": false,
+    "required": false,
+    "secondaryFiles": null
+  },
+  {
+    "default": null,
+    "doc": "string doc",
+    "id": "string",
+    "label": "string label",
+    "type": "string",
+    "array": false,
+    "required": true,
+    "secondaryFiles": null
+  },
+  {
+    "default": "default_value",
+    "doc": "string default doc",
+    "id": "string_default",
+    "label": "string default label",
+    "type": "string",
+    "array": false,
+    "required": true,
+    "secondaryFiles": null
+  },
+  {
+    "default": null,
+    "doc": "string array doc",
+    "id": "string_array",
+    "label": "string array label",
+    "type": "string",
+    "array": true,
+    "required": true,
+    "secondaryFiles": null
+  },
+  {
+    "default": null,
+    "doc": "string array_2 doc",
+    "id": "string_array_2",
+    "label": "string array_2 label",
+    "type": "string",
+    "array": true,
+    "required": true,
+    "secondaryFiles": null
+  },
+  {
+    "default": null,
+    "doc": "string not require doc",
+    "id": "string_not_require",
+    "label": "string not require label",
+    "type": "string",
+    "array": false,
+    "required": false,
+    "secondaryFiles": null
+  },
+  {
+    "default": null,
+    "doc": "int doc",
+    "id": "int",
+    "label": "int label",
+    "type": "int",
+    "array": false,
+    "required": true,
+    "secondaryFiles": null
+  },
+  {
+    "default": 1,
+    "doc": "int default doc",
+    "id": "int_default",
+    "label": "int default label",
+    "type": "int",
+    "array": false,
+    "required": true,
+    "secondaryFiles": null
+  },
+  {
+    "default": null,
+    "doc": "int array doc",
+    "id": "int_array",
+    "label": "int array label",
+    "type": "int",
+    "array": true,
+    "required": true,
+    "secondaryFiles": null
+  },
+  {
+    "default": null,
+    "doc": "int array 2 doc",
+    "id": "int_array_2",
+    "label": "int array 2 label",
+    "type": "int",
+    "array": true,
+    "required": true,
+    "secondaryFiles": null
+  },
+  {
+    "default": null,
+    "doc": "int not require doc",
+    "id": "int_not_require",
+    "label": "int not require label",
+    "type": "int",
+    "array": false,
+    "required": false,
+    "secondaryFiles": null
+  },
+  {
+    "default": null,
+    "doc": "Any doc",
+    "id": "any",
+    "label": "Any label",
+    "type": "Any",
+    "array": false,
+    "required": true,
+    "secondaryFiles": null
+  },
+  {
+    "default": "default_value",
+    "doc": "any default doc",
+    "id": "any_default",
+    "label": "any default label",
+    "type": "Any",
+    "array": false,
+    "required": true,
+    "secondaryFiles": null
+  },
+  {
+    "default": null,
+    "doc": "any array doc",
+    "id": "any_array",
+    "label": "any array label",
+    "type": "Any",
+    "array": true,
+    "required": true,
+    "secondaryFiles": null
+  },
+  {
+    "default": null,
+    "doc": "any array 2 doc",
+    "id": "any_array_2",
+    "label": "any array 2 label",
+    "type": "Any",
+    "array": true,
+    "required": true,
+    "secondaryFiles": null
+  },
+  {
+    "default": null,
+    "doc": "boolean doc",
+    "id": "boolean",
+    "label": "boolean label",
+    "type": "boolean",
+    "array": false,
+    "required": true,
+    "secondaryFiles": null
+  },
+  {
+    "default": true,
+    "doc": "boolean default doc",
+    "id": "boolean_default",
+    "label": "boolean default label",
+    "type": "boolean",
+    "array": false,
+    "required": true,
+    "secondaryFiles": null
+  },
+  {
+    "default": null,
+    "doc": "boolean not require doc",
+    "id": "boolean_not_require",
+    "label": "boolean not require label",
+    "type": "boolean",
+    "array": false,
+    "required": false,
+    "secondaryFiles": null
+  }
+]

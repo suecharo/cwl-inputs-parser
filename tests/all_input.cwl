@@ -24,8 +24,14 @@ inputs:
   - id: file_with_secondaryFiles
     type: File
     secondaryFiles:
-      - ".foo"
-      - ".bar"
+      - .foo
+      - .foo?
+      - pattern: .foo
+      - pattern: .foo?
+      - pattern: .foo
+        required: true
+      - pattern: .foo
+        required: false
     label: "File with secondaryFiles label"
     doc: "File with secondaryFiles doc"
   - id: directory
