@@ -3,7 +3,8 @@
 from pathlib import Path
 from pprint import pprint
 
-from neko_punch.utils import UnsupportedValueError, wf_path_to_neko_fields
+from cwl_inputs_parser.utils import (UnsupportedValueError,
+                                     wf_location_to_inputs)
 from schema_salad.exceptions import ValidationException
 from yaml import safe_load
 
@@ -11,12 +12,11 @@ CONFORMANCE_TEST_PATH = Path(__file__).parent.joinpath("conformance_test_v1.2_fi
 
 
 def main():
-    with CONFORMANCE_TEST_PATH.open(mode="r", encoding="utf-8") as f:
-        conformance_test = safe_load(f)
+    conformance_test = safe_load(CONFORMANCE_TEST_PATH.open(mode="r", encoding="utf-8"))
     for test in conformance_test:
         wf_path = Path(__file__).parent.joinpath(test["tool"])  # noqa: E501
         try:
-            neko_fields = wf_path_to_neko_fields(wf_path)
+            input_fields = wf_location_to_inputs(wf_path)
         except Exception as e:
             if isinstance(e, ValidationException):
                 # print(test["id"])
@@ -47,7 +47,7 @@ def main():
                 pass
             continue
         # print(test["id"])
-        # pprint(neko_fields)
+        # pprint(input_fields)
 
 
 if __name__ == "__main__":

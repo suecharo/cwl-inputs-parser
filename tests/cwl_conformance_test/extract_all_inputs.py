@@ -3,20 +3,20 @@
 from pathlib import Path
 from pprint import pprint
 
+from cwl_inputs_parser.utils import (Inputs, as_uri, extract_main_tool,
+                                     fetch_document)
 from cwl_utils.parser import load_document
 from cwl_utils.parser.cwl_v1_2 import (CommandInputArraySchema,
                                        CommandInputEnumSchema,
                                        CommandInputRecordSchema,
                                        InputArraySchema, InputRecordSchema)
-from neko_punch.utils import Neko, as_uri, extract_main_tool, fetch_document
 from yaml import safe_load
 
 
 def main():
     conformance_test_path = Path(__file__).parent.joinpath("conformance_test_v1.2_fixed.yaml")  # noqa: E501
-    with conformance_test_path.open(mode="r", encoding="utf-8") as f:
-        tests = safe_load(f)
-    a = set()
+    tests = safe_load(conformance_test_path.open(mode="r", encoding="utf-8"))
+    set_ = set()
     for test in tests:
         tool_path = Path(__file__).parent.joinpath(test["tool"])
         try:
@@ -24,8 +24,7 @@ def main():
         except Exception:
             continue
         try:
-            neko = Neko(cwl_obj)
-            neko.punch()
+            Inputs(cwl_obj)
         except Exception:
             continue
 
@@ -66,22 +65,22 @@ def main():
                     # pprint(inp.__dict__)
                     pass
             elif isinstance(inp.type, CommandInputArraySchema):
-                a.add(test['id'])
+                set_.add(test['id'])
                 # pprint(f"--- {test['id']}: {test['tool']} ---")
                 # pprint(inp.__dict__)
                 pass
             elif isinstance(inp.type, CommandInputEnumSchema):
-                a.add(test['id'])
+                set_.add(test['id'])
                 # pprint(f"--- {test['id']}: {test['tool']} ---")
                 # pprint(inp.__dict__)
                 pass
             elif isinstance(inp.type, CommandInputRecordSchema):
-                a.add(test['id'])
+                set_.add(test['id'])
                 # pprint(f"--- {test['id']}: {test['tool']} ---")
                 # pprint(inp.__dict__)
                 pass
             elif isinstance(inp.type, InputArraySchema):
-                a.add(test['id'])
+                set_.add(test['id'])
                 if isinstance(inp.type.items, InputRecordSchema):
                     # pprint(f"--- {test['id']}: {test['tool']} ---")
                     # pprint(inp.__dict__)
@@ -91,16 +90,16 @@ def main():
                     # pprint(inp.__dict__)
                     pass
             elif isinstance(inp.type, InputRecordSchema):
-                a.add(test['id'])
+                set_.add(test['id'])
                 # pprint(f"--- {test['id']}: {test['tool']} ---")
                 # pprint(inp.__dict__)
                 pass
             else:
-                a.add(test['id'])
+                set_.add(test['id'])
                 # pprint(f"--- {test['id']}: {test['tool']} ---")
                 # pprint(inp.__dict__)
                 pass
-    print(list(a))
+    print(list(set_))
 
 
 if __name__ == "__main__":

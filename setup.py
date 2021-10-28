@@ -4,8 +4,7 @@ from pathlib import Path
 
 from setuptools import setup
 
-with Path(__file__).parent.joinpath("README.md").open(mode="r", encoding="utf-8") as f:  # noqa: E501
-    long_description = f.read()
+long_description = Path(__file__).parent.joinpath("README.md").read_text(encoding="utf-8")  # noqa: E501
 
 setup(
     name="cwl-inputs-parser",
@@ -16,10 +15,10 @@ setup(
     long_description_content_type="text/markdown",
     author="suecharo",
     author_email="suehiro619@gmail.com",
-    url="https://github.com/suecharo/neko-punch",
+    url="https://github.com/suecharo/cwl-inputs-parser",
     python_requires=">=3.6",
     install_requires=[
-        "cwl-utils @ git+https://github.com/common-workflow-language/cwl-utils.git@d5e0338b7fbeb93f2872f9e2268a4af7e092a57b",  # noqa
+        "cwl-utils @ git+https://github.com/common-workflow-language/cwl-utils.git@d5e0338b7fbeb93f2872f9e2268a4af7e092a57b",  # noqa: E501
         "flask",
         "pyyaml",
         "requests",

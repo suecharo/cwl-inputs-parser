@@ -4,10 +4,10 @@ from copy import deepcopy
 from pathlib import Path
 
 import pytest
+from cwl_inputs_parser.utils import (Inputs, UnsupportedValueError,
+                                     wf_location_to_inputs)
 from cwl_utils.parser.cwl_v1_2 import (CommandInputArraySchema,
                                        InputArraySchema, SecondaryFileSchema)
-from neko_punch.utils import (Neko, UnsupportedValueError,
-                              wf_path_to_neko_fields)
 from yaml import safe_load
 
 from const import CONFORMANCE_TEST_PATH, CWL_UTILS_OBJ_TEMPLATE
@@ -21,15 +21,14 @@ def test_using_conformance_test():
     for test in conformance_test:
         if test["id"] in CONFORMANCE_TEST_IDS:
             wf_path = Path(__file__).parent.joinpath("cwl_conformance_test").joinpath(test["tool"])  # noqa: E501
-            wf_path_to_neko_fields(wf_path)
+            wf_location_to_inputs(wf_path)
 
 
 def test_command_input_array_schema_file():
     cwl_obj = deepcopy(CWL_UTILS_OBJ_TEMPLATE)
-    cwl_obj.inputs[0].type = CommandInputArraySchema(items="File", type="array")
-    neko = Neko(cwl_obj)
-    neko.punch()
-    result = neko.results[0]
+    cwl_obj.inputs[0].type = CommandInputArraySchema(items="File", type="array")  # noqa: E501
+    inputs = Inputs(cwl_obj)
+    result = inputs.fields[0]
     assert result.type == "File"
     assert result.array is True
 
@@ -37,9 +36,8 @@ def test_command_input_array_schema_file():
 def test_command_input_array_schema_int():
     cwl_obj = deepcopy(CWL_UTILS_OBJ_TEMPLATE)
     cwl_obj.inputs[0].type = CommandInputArraySchema(items="int", type="array")
-    neko = Neko(cwl_obj)
-    neko.punch()
-    result = neko.results[0]
+    inputs = Inputs(cwl_obj)
+    result = inputs.fields[0]
     assert result.type == "int"
     assert result.array is True
 
@@ -48,8 +46,7 @@ def test_command_input_array_schema_items_is_unknown():
     cwl_obj = deepcopy(CWL_UTILS_OBJ_TEMPLATE)
     cwl_obj.inputs[0].type = CommandInputArraySchema(items="unknown", type="array")  # noqa: E501
     with pytest.raises(UnsupportedValueError) as e:
-        neko = Neko(cwl_obj)
-        neko.punch()
+        Inputs(cwl_obj)
     assert "an unsupported format" in str(e.value)
 
 
@@ -60,9 +57,8 @@ def test_command_input_array_schema_secondaryFiles():
         SecondaryFileSchema(pattern="bar", required=False)
     ]
     cwl_obj.inputs[0].type = CommandInputArraySchema(items="File", type="array")  # noqa: E501
-    neko = Neko(cwl_obj)
-    neko.punch()
-    result = neko.results[0]
+    inputs = Inputs(cwl_obj)
+    result = inputs.fields[0]
     assert result.type == "File"
     assert result.array is True
     assert result.secondaryFiles[0].pattern == "foo"
@@ -74,9 +70,8 @@ def test_command_input_array_schema_secondaryFiles():
 def test_input_array_schema_file():
     cwl_obj = deepcopy(CWL_UTILS_OBJ_TEMPLATE)
     cwl_obj.inputs[0].type = InputArraySchema(items="File", type="array")
-    neko = Neko(cwl_obj)
-    neko.punch()
-    result = neko.results[0]
+    inputs = Inputs(cwl_obj)
+    result = inputs.fields[0]
     assert result.type == "File"
     assert result.array is True
 
@@ -84,9 +79,8 @@ def test_input_array_schema_file():
 def test_input_array_schema_int():
     cwl_obj = deepcopy(CWL_UTILS_OBJ_TEMPLATE)
     cwl_obj.inputs[0].type = InputArraySchema(items="int", type="array")
-    neko = Neko(cwl_obj)
-    neko.punch()
-    result = neko.results[0]
+    inputs = Inputs(cwl_obj)
+    result = inputs.fields[0]
     assert result.type == "int"
     assert result.array is True
 
@@ -95,6 +89,5 @@ def test_input_array_schema_items_is_unknown():
     cwl_obj = deepcopy(CWL_UTILS_OBJ_TEMPLATE)
     cwl_obj.inputs[0].type = InputArraySchema(items="unknown", type="array")  # noqa: E501
     with pytest.raises(UnsupportedValueError) as e:
-        neko = Neko(cwl_obj)
-        neko.punch()
+        Inputs(cwl_obj)
     assert "an unsupported format" in str(e.value)

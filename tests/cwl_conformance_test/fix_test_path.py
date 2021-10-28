@@ -55,8 +55,7 @@ def main():
         sys.exit(1)
     conformance_test_path = \
         PWD.joinpath(f"conformance_test_{sys.argv[1]}.yaml")
-    with conformance_test_path.open(mode="r", encoding="utf-8") as f:
-        tests = safe_load(f)
+    tests = safe_load(conformance_test_path.open(mode="r", encoding="utf-8"))
     fixed_tests = []
     for test in tests:
         if "id" not in test and "label" not in test:
@@ -102,7 +101,7 @@ def main():
 
         fixed_tests.append(fixed_test)
     fixed_tests_path = PWD.joinpath(f"conformance_test_{sys.argv[1]}_fixed.yaml")  # noqa: E501
-    with fixed_tests_path.open("w") as f:
+    with fixed_tests_path.open("w", encoding="utf-8") as f:
         f.write(safe_dump(fixed_tests, default_flow_style=False))
 
 

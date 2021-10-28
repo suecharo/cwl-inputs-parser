@@ -1,21 +1,20 @@
 #!/usr/bin/env python3
 # coding: utf-8
 import json
-import os
 from collections import OrderedDict
 from copy import deepcopy
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, List, NoReturn, Optional, Union, cast
 
-from cwl_utils.parser import load_document
+from cwl_utils.parser import load_document_by_string
 from cwl_utils.parser.cwl_v1_2 import (CommandInputArraySchema,
                                        CommandInputEnumSchema,
                                        CommandInputParameter,
                                        CommandInputRecordSchema,
                                        CommandLineTool, ExpressionTool,
                                        InputArraySchema, InputRecordSchema,
-                                       Workflow, file_uri)
+                                       Workflow)
 from requests import get
 
 CWLUtilObj = Union[CommandLineTool, Workflow, ExpressionTool]
@@ -30,32 +29,31 @@ def download_file(remote_url: str) -> str:
     return response.text
 
 
-def is_remote_url(path: str) -> bool:
+def is_remote_url(location: str) -> bool:
     """Returns True if the path is a remote URL."""
-    return path.startswith("http://") or path.startswith("https://")
+    return location.startswith("http://") or location.startswith("https://")
 
 
-def fetch_document(path: Union[str, Path]) -> str:
-    """Fetches a CWL document from a file or URL."""
-    if isinstance(path, str):
-        if is_remote_url(path):
-            return download_file(path)
-        path = Path(path)
-    if path.is_absolute():
-        return path.open(mode="r", encoding="utf-8").read()
-    else:
-        return Path().cwd().joinpath(path).read_text(encoding="utf-8")
+def fetch_document(location: Union[str, Path]) -> str:
+    """Fetches a CWL document from a file path or a remote URL."""
+    if isinstance(location, str):
+        if is_remote_url(location):
+            return download_file(location)
+        location = Path(location)
+    if location.is_absolute():
+        return location.read_text(encoding="utf-8")
+    return Path().cwd().joinpath(location).read_text(encoding="utf-8")
 
 
-def as_uri(path: Union[str, Path]) -> str:
-    """Converts a path to a URI."""
-    if isinstance(path, str):
-        if is_remote_url(path):
-            return os.path.dirname(path) + "/"
-        path = Path(path)
-    if not path.is_absolute():
-        path = Path().cwd().joinpath(path)
-    return file_uri(str(path.parent)) + "/"
+def as_uri(location: Union[str, Path]) -> str:
+    """Converts a location to a URI."""
+    if isinstance(location, str):
+        if is_remote_url(location):
+            return location
+        location = Path(location)
+    if not location.is_absolute():
+        location = Path().cwd().joinpath(location)
+    return location.as_uri()
 
 
 def extract_main_tool(cwl_obj: CWLUtilLoadResult) -> CWLUtilObj:
@@ -79,9 +77,9 @@ class SecondaryFile:
 
 
 @dataclass
-class NekoField:
+class InputField:
     """
-    NekoField
+    InputField
     example:
     {
         "default": null,
@@ -108,29 +106,45 @@ class NekoField:
     secondaryFiles: Optional[List[SecondaryFile]] = None
 
 
-class Neko:
-    """Generates NekoFields from a cwl-utils object."""
+class Inputs:
+    """Generates InputField from a cwl-utils object."""
+
     def __init__(self, cwl_obj: CWLUtilLoadResult) -> None:
         self.ori_cwl_obj = deepcopy(cwl_obj)
         self.cwl_obj = deepcopy(extract_main_tool(cwl_obj))
-        self.results: List[NekoField] = []
+        self.fields: List[InputField] = []
+        self._parse()
 
-    def punch(self):
-        """Converts a CWL object to a Neko object."""
-        self.results = []
+    def as_json(self) -> str:
+        """Dump as json."""
+        def encode_default(item):
+            if isinstance(item, object) and hasattr(item, '__dict__'):
+                return item.__dict__
+            else:
+                raise TypeError
+
+        return json.dumps(self.fields, default=encode_default, indent=2)
+
+    def as_dict(self) -> dict:
+        """Dump as dict."""
+        str_json = self.as_json()
+        return json.loads(str_json)
+
+    def _parse(self):
+        """Parses inputs field from the CWL object."""
         for inp_obj in self.cwl_obj.inputs:
             if isinstance(inp_obj.type, str):
-                neko_field = self.typical_field(inp_obj)
+                inp_field = self._typical_field(inp_obj)
             elif isinstance(inp_obj.type, list):
                 if len(inp_obj.type) == 1:
                     tmp_obj = deepcopy(inp_obj)
                     tmp_obj.type = inp_obj.type[0]
                     if isinstance(tmp_obj.type, str):
-                        neko_field = self.typical_field(tmp_obj)
+                        inp_field = self._typical_field(tmp_obj)
                     elif isinstance(tmp_obj.type, CommandInputArraySchema):
-                        neko_field = self.command_input_array_field(tmp_obj)  # noqa: E501
+                        inp_field = self._command__input_array_field(tmp_obj)  # noqa: E501
                     elif isinstance(tmp_obj.type, InputArraySchema):
-                        neko_field = self.input_array_field(tmp_obj)
+                        inp_field = self._input_array_field(tmp_obj)
                     else:
                         raise UnsupportedValueError("The type field contains an unsupported format")  # noqa: E501
                 elif len(inp_obj.type) == 2:
@@ -139,43 +153,43 @@ class Neko:
                         for t in inp_obj.type:
                             if t != 'null':
                                 tmp_obj.type = t
-                        neko_filed = self.typical_field(tmp_obj)
-                        neko_filed.required = False
-                        neko_field = neko_filed
+                        inp_field = self._typical_field(tmp_obj)
+                        inp_field.required = False
                     else:
                         # [TODO] not support
-                        raise UnsupportedValueError("The union field does not support by neko-punch")  # noqa: E501
+                        raise UnsupportedValueError("The union field does not support by cwl-inputs-parser")  # noqa: E501
                 else:
                     # [TODO] not support
-                    raise UnsupportedValueError("The union field does not support by neko-punch")  # noqa: E501
+                    raise UnsupportedValueError("The union field does not support by cwl-inputs-parser")  # noqa: E501
             elif isinstance(inp_obj.type, CommandInputArraySchema):
                 if inp_obj.type.items not in ["boolean", "int", "string", "File", "Directory", "Any"]:  # noqa: E501
                     raise UnsupportedValueError("The type field contains an unsupported format")  # noqa: E501
-                neko_field = self.command_input_array_field(inp_obj)
+                inp_field = self._command__input_array_field(inp_obj)
             elif isinstance(inp_obj.type, CommandInputEnumSchema):
                 # [TODO] not support
-                # neko_field = self.command_input_enum_field(inp_obj)
-                raise UnsupportedValueError("The CommandInputEnumSchema field does not support by neko-punch")  # noqa: E501
+                # inp_field = self._command_input_enum_field(inp_obj)
+                raise UnsupportedValueError("The CommandInputEnumSchema field does not support by cwl-inputs-parser")  # noqa: E501
             elif isinstance(inp_obj.type, CommandInputRecordSchema):
                 # [TODO] not support
-                # neko_field = self.command_input_record_field(inp_obj)
-                raise UnsupportedValueError("The CommandInputRecordSchema field does not support by neko-punch")  # noqa: E501
+                # inp_field = self._command_input_record_field(inp_obj)
+                raise UnsupportedValueError("The CommandInputRecordSchema field does not support by cwl-inputs-parser")  # noqa: E501
             elif isinstance(inp_obj.type, InputArraySchema):
                 if isinstance(inp_obj.type.items, InputRecordSchema):
                     # [TODO] not support
-                    raise UnsupportedValueError("The InputRecordSchema field in the InputArraySchema field does not support by neko-punch")  # noqa: E501
+                    raise UnsupportedValueError("The InputRecordSchema field in the InputArraySchema field does not support by cwl-inputs-parser")  # noqa: E501
                 if inp_obj.type.items not in ["boolean", "int", "string", "File", "Directory", "Any"]:  # noqa: E501
                     raise UnsupportedValueError("The type field contains an unsupported format")  # noqa: E501
-                neko_field = self.input_array_field(inp_obj)
+                inp_field = self._input_array_field(inp_obj)
             elif isinstance(inp_obj.type, InputRecordSchema):
                 # [TODO] not support
-                raise UnsupportedValueError("The InputRecordSchema field does not support by neko-punch")  # noqa: E501
+                raise UnsupportedValueError("The InputRecordSchema field does not support by cwl-inputs-parser")  # noqa: E501
             else:
                 # [TODO] not support
                 raise UnsupportedValueError("The type field contains an unsupported format")  # noqa: E501
-            if neko_field.type == "File":
+
+            if inp_field.type == "File":
                 if inp_obj.secondaryFiles:
-                    neko_field.secondaryFiles = []
+                    inp_field.secondaryFiles = []
                     for secondary_file in inp_obj.secondaryFiles:
                         required = secondary_file.required
                         pattern = secondary_file.pattern
@@ -184,29 +198,30 @@ class Neko:
                             pattern = pattern.rstrip("?")
                         if required is None:
                             required = True
-                        neko_field.secondaryFiles.append(
+                        inp_field.secondaryFiles.append(
                             SecondaryFile(
                                 pattern=pattern,
                                 required=required
                             )
                         )
-            self.results.append(neko_field)
 
-    def typical_field(self, inp_obj: CommandInputParameter) -> NekoField:
+            self.fields.append(inp_field)
+
+    def _typical_field(self, inp_obj: CommandInputParameter) -> InputField:
         """
         Generates a typical fields
         like: boolean, int, string, File, stdin, Directory, Any
         """
         if inp_obj.type == "boolean":
-            return self.boolean_field(inp_obj)
+            return self._boolean_field(inp_obj)
         elif inp_obj.type == "int":
-            return self.int_field(inp_obj)
+            return self._int_field(inp_obj)
         elif inp_obj.type == "string":
-            return self.string_field(inp_obj)
+            return self._string_field(inp_obj)
         elif inp_obj.type == "File":
-            return self.file_field(inp_obj)
+            return self._file_field(inp_obj)
         elif inp_obj.type == "stdin":
-            return self.stdin_field(inp_obj)
+            return self._stdin_field(inp_obj)
         elif inp_obj.type == "Directory":
             return self.directory_field(inp_obj)
         elif inp_obj.type == "Any":
@@ -216,30 +231,28 @@ class Neko:
             raise UnsupportedValueError("The type field contains an unsupported format")  # noqa: E501
 
     @staticmethod
-    def clean_val(val: Optional[Any]) -> Optional[Any]:
-        """Cleans a value."""
-        if val is None:
-            return None
-        elif isinstance(val, str):
+    def _clean_val(val: Optional[Any]) -> Optional[Any]:
+        """Cleans a value field."""
+        if isinstance(val, str):
             return deepcopy(val).replace("\n", " ").strip()
         return deepcopy(val)
 
-    def template_field(self, inp_obj: CommandInputParameter) -> NekoField:
-        """Generates a NekoField template from a CWL InputParameter."""
-        id_ = self.clean_val(inp_obj.id)
+    def _template_field(self, inp_obj: CommandInputParameter) -> InputField:
+        """Generates a InputField template from a CWL InputParameter."""
+        id_ = self._clean_val(inp_obj.id)
         if isinstance(id_, str):
             id_ = id_.split("#")[-1]
-        return NekoField(
+        return InputField(
             default=deepcopy(inp_obj.default),
-            doc=self.clean_val(inp_obj.doc),
+            doc=self._clean_val(inp_obj.doc),
             id=id_,
-            label=self.clean_val(inp_obj.label),
-            type=self.clean_val(inp_obj.type),
+            label=self._clean_val(inp_obj.label),
+            type=self._clean_val(inp_obj.type),
         )
 
-    def boolean_field(self, inp_obj: CommandInputParameter) -> NekoField:
+    def _boolean_field(self, inp_obj: CommandInputParameter) -> InputField:
         """
-        Generates a NekoField from a CWL InputParameter.
+        Generates a InputField from a CWL InputParameter.
         inp_obj example from 'v1.2/revsort-packed.cwl'
         {
             'default': True,
@@ -259,11 +272,11 @@ class Neko:
         make-template result:
         reverse_sort: true  # default value of type "boolean".
         """
-        return self.template_field(inp_obj)
+        return self._template_field(inp_obj)
 
-    def int_field(self, inp_obj: CommandInputParameter) -> NekoField:
+    def _int_field(self, inp_obj: CommandInputParameter) -> InputField:
         """
-        Generates a NekoField from a CWL InputParameter.
+        Generates a InputField from a CWL InputParameter.
         inp_obj example from 'v1.2/bwa-mem-tool.cwl'
         {
             'default': None,
@@ -283,11 +296,11 @@ class Neko:
         make-template result:
         minimum_seed_length: 0  # type "int"
         """
-        return self.template_field(inp_obj)
+        return self._template_field(inp_obj)
 
-    def string_field(self, inp_obj: CommandInputParameter) -> NekoField:
+    def _string_field(self, inp_obj: CommandInputParameter) -> InputField:
         """
-        Generates a NekoField from a CWL InputParameter.
+        Generates a InputField from a CWL InputParameter.
         inp_obj example from 'v1.2/pass-unconnected.cwl'
         {
             'default': 'hello inp2',
@@ -307,11 +320,11 @@ class Neko:
         make-template result:
         inp2: hello inp2  # default value of type "string".
         """
-        return self.template_field(inp_obj)
+        return self._template_field(inp_obj)
 
-    def file_field(self, inp_obj: CommandInputParameter) -> NekoField:
+    def _file_field(self, inp_obj: CommandInputParameter) -> InputField:
         """
-        Generates a NekoField from a CWL InputParameter.
+        Generates a InputField from a CWL InputParameter.
         inp_obj example from 'v1.2/count-lines5-wf.cwl'
         {
             'default': ordereddict([('class', 'File'), ('location', 'hello.txt')]),
@@ -336,17 +349,17 @@ class Neko:
         location field is not, an implementation may assign the value
         of the path field to location, and remove the path field.
         """
-        result = self.template_field(inp_obj)
+        field = self._template_field(inp_obj)
         if isinstance(inp_obj.default, OrderedDict) and len(inp_obj.default) != 0:  # noqa: E501
             if "location" in inp_obj.default:
-                result.default = inp_obj.default["location"]
+                field.default = inp_obj.default["location"]
             elif "path" in inp_obj.default:
-                result.default = inp_obj.default["path"]
-        return result
+                field.default = inp_obj.default["path"]
+        return field
 
-    def stdin_field(self, inp_obj: CommandInputParameter) -> NekoField:
+    def _stdin_field(self, inp_obj: CommandInputParameter) -> InputField:
         """
-        Generates a NekoField from a CWL InputParameter.
+        Generates a InputField from a CWL InputParameter.
         inp_obj example from 'v1.2/cat-tool-shortcut.cwl'
         {
             'default': None,
@@ -368,13 +381,13 @@ class Neko:
             class: File
             path: a/file/path
         """
-        result = self.file_field(inp_obj)
-        result.type = "File"
-        return result
+        field = self._file_field(inp_obj)
+        field.type = "File"
+        return field
 
-    def directory_field(self, inp_obj: CommandInputParameter) -> NekoField:
+    def directory_field(self, inp_obj: CommandInputParameter) -> InputField:
         """
-        Generates a NekoField from a CWL InputParameter.
+        Generates a InputField from a CWL InputParameter.
         inp_obj example from 'v1.2/dir.cwl'
         {
             'default': None,
@@ -396,11 +409,11 @@ class Neko:
             class: Directory
             path: a/directory/path
         """
-        return self.template_field(inp_obj)
+        return self._template_field(inp_obj)
 
-    def any_field(self, inp_obj: CommandInputParameter) -> NekoField:
+    def any_field(self, inp_obj: CommandInputParameter) -> InputField:
         """
-        Generates a NekoField from a CWL InputParameter.
+        Generates a InputField from a CWL InputParameter.
         inp_obj example from 'v1.2/null-expression1-tool.cwl'
         {
             'default': 'the-default',
@@ -420,11 +433,11 @@ class Neko:
         make-template result:
         i1: "the-default"  # default value of type "Any".
         """
-        return self.template_field(inp_obj)
+        return self._template_field(inp_obj)
 
-    def command_input_array_field(self, inp_obj: CommandInputParameter) -> NekoField:  # noqa: E501
+    def _command__input_array_field(self, inp_obj: CommandInputParameter) -> InputField:  # noqa: E501
         """
-        Generates a NekoField from a CWL InputParameter.
+        Generates a InputField from a CWL InputParameter.
         [TODO] more check
         inp_obj example from 'v1.2/docker-array-secondaryfiles.cwl'
         {
@@ -465,35 +478,33 @@ class Neko:
         'pattern': '${ return null; }',
         'required': None}
         """
-        result = self.template_field(inp_obj)
-        result.type = inp_obj.type.items
-        result.array = True
-        return result
+        field = self._template_field(inp_obj)
+        field.type = inp_obj.type.items
+        field.array = True
+        return field
 
-    def command_input_enum_field(self, inp_obj: CommandInputParameter) -> NoReturn:  # noqa: E501
+    def _command_input_enum_field(self, inp_obj: CommandInputParameter) -> NoReturn:  # noqa: E501
         """
-        Generates a NekoField from a CWL InputParameter.
+        Generates a InputField from a CWL InputParameter.
 
-        [TODO] do not know how to handle enum field in CWL, therefore
-        the neko-punch will not support this.
+        [TODO] do not know how to handle enum field in CWL.
         """
 
-    def command_input_record_field(self, inp_obj: CommandInputParameter) -> NoReturn:  # noqa: E501
+    def _command_input_record_field(self, inp_obj: CommandInputParameter) -> NoReturn:  # noqa: E501
         """
-        Generates a NekoField from a CWL InputParameter.
+        Generates a InputField from a CWL InputParameter.
         v1.2/record-output.cwl
         v1.2/anon_enum_inside_array.cwl
         v1.2/record-in-secondaryFiles.cwl
         v1.2/record-in-format.cwl
         v1.2/record-out-format.cwl
 
-        [TODO] do not know how to handle record field in CWL, therefore
-        the neko-punch will not support this.
+        [TODO] do not know how to handle record field in CWL.
         """
 
-    def input_array_field(self, inp_obj: CommandInputParameter) -> NekoField:
+    def _input_array_field(self, inp_obj: CommandInputParameter) -> InputField:
         """
-        Generates a NekoField from a CWL InputParameter.
+        Generates a InputField from a CWL InputParameter.
         inp_obj example from 'v1.2/count-lines3-wf.cwl'
         {
             'default': None,
@@ -526,31 +537,20 @@ class Neko:
             - class: File
                 path: a/file/path
         """
-        result = self.template_field(inp_obj)
-        result.type = inp_obj.type.items
-        result.array = True
-        if result.label is None:
-            result.label = self.clean_val(inp_obj.type.label)
-        if result.doc is None:
-            result.doc = self.clean_val(inp_obj.type.doc)
-        return result
+        field = self._template_field(inp_obj)
+        field.type = inp_obj.type.items
+        field.array = True
+        if field.label is None:
+            field.label = self._clean_val(inp_obj.type.label)
+        if field.doc is None:
+            field.doc = self._clean_val(inp_obj.type.doc)
+        return field
 
 
-def wf_path_to_neko_fields(wf_path: str) -> List[NekoField]:
-    """Convert workflow path to neko object."""
-    wf_doc = fetch_document(wf_path)
-    cwl_obj: CWLUtilLoadResult = load_document(wf_doc, baseuri=as_uri(wf_path))
-    neko = Neko(cwl_obj)
-    neko.punch()
-    return neko.results
-
-
-def dump_json(obj) -> str:
-    """Dump json."""
-    def encode_default(item):
-        if isinstance(item, object) and hasattr(item, '__dict__'):
-            return item.__dict__
-        else:
-            raise TypeError
-
-    return json.dumps(obj, default=encode_default, indent=2)
+def wf_location_to_inputs(wf_location: Union[str, Path]) -> Inputs:
+    """
+    Generates Inputs from a location of CWL Workflow.
+    """
+    wf_docs = fetch_document(wf_location)
+    wf_obj = load_document_by_string(wf_docs, uri=as_uri(wf_location))
+    return Inputs(wf_obj)

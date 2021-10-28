@@ -12,8 +12,7 @@ def main():
     if len(sys.argv) < 2:
         print("Usage: show_test_by_id.py <test_ids>")
         sys.exit(1)
-    with CONFORMANCE_TEST_PATH.open(mode="r", encoding="utf-8") as f:
-        conformance_test = safe_load(f)
+    conformance_test = safe_load(CONFORMANCE_TEST_PATH.open(mode="r", encoding="utf-8"))  # noqa: E501
     ids = [s.strip("[],") for s in map(str, sys.argv[1:])]
     for test in conformance_test:
         if str(test["id"]) in ids:

@@ -4,7 +4,7 @@ from copy import deepcopy
 from pathlib import Path
 from typing import OrderedDict
 
-from neko_punch.utils import Neko, wf_path_to_neko_fields
+from cwl_inputs_parser.utils import Inputs, wf_location_to_inputs
 from yaml import safe_load
 
 from const import CONFORMANCE_TEST_PATH, CWL_UTILS_OBJ_TEMPLATE
@@ -13,20 +13,18 @@ CONFORMANCE_TEST_IDS = [1, 2, 4, 5, 6, 7, 8, 9, 13, 14, 15, 16, 17, 18, 19, 20, 
 
 
 def test_using_conformance_test():
-    with CONFORMANCE_TEST_PATH.open(mode="r", encoding="utf-8") as f:
-        conformance_test = safe_load(f)
+    conformance_test = safe_load(CONFORMANCE_TEST_PATH.open(mode="r", encoding="utf-8"))  # noqa: E501
     for test in conformance_test:
         if test["id"] in CONFORMANCE_TEST_IDS:
             wf_path = Path(__file__).parent.joinpath("cwl_conformance_test").joinpath(test["tool"])  # noqa: E501
-            wf_path_to_neko_fields(wf_path)
+            wf_location_to_inputs(wf_path)
 
 
 def test_file():
     cwl_obj = deepcopy(CWL_UTILS_OBJ_TEMPLATE)
     cwl_obj.inputs[0].type = "File"
-    neko = Neko(cwl_obj)
-    neko.punch()
-    result = neko.results[0]
+    inputs = Inputs(cwl_obj)
+    result = inputs.fields[0]
     assert result.type == "File"
     assert result.required is True
 
@@ -35,9 +33,8 @@ def test_file_default_by_path():
     cwl_obj = deepcopy(CWL_UTILS_OBJ_TEMPLATE)
     cwl_obj.inputs[0].type = "File"
     cwl_obj.inputs[0].default = OrderedDict([("class", "File"), ("path", "test.txt")])  # noqa: E501
-    neko = Neko(cwl_obj)
-    neko.punch()
-    result = neko.results[0]
+    inputs = Inputs(cwl_obj)
+    result = inputs.fields[0]
     assert result.type == "File"
     assert result.default == "test.txt"
 
@@ -46,9 +43,8 @@ def test_file_default_by_location():
     cwl_obj = deepcopy(CWL_UTILS_OBJ_TEMPLATE)
     cwl_obj.inputs[0].type = "File"
     cwl_obj.inputs[0].default = OrderedDict([("class", "File"), ("location", "test.txt")])  # noqa: E501
-    neko = Neko(cwl_obj)
-    neko.punch()
-    result = neko.results[0]
+    inputs = Inputs(cwl_obj)
+    result = inputs.fields[0]
     assert result.type == "File"
     assert result.default == "test.txt"
 
@@ -56,9 +52,8 @@ def test_file_default_by_location():
 def test_any():
     cwl_obj = deepcopy(CWL_UTILS_OBJ_TEMPLATE)
     cwl_obj.inputs[0].type = "Any"
-    neko = Neko(cwl_obj)
-    neko.punch()
-    result = neko.results[0]
+    inputs = Inputs(cwl_obj)
+    result = inputs.fields[0]
     assert result.type == "Any"
     assert result.required is True
 
@@ -66,9 +61,8 @@ def test_any():
 def test_direcotroy():
     cwl_obj = deepcopy(CWL_UTILS_OBJ_TEMPLATE)
     cwl_obj.inputs[0].type = "Directory"
-    neko = Neko(cwl_obj)
-    neko.punch()
-    result = neko.results[0]
+    inputs = Inputs(cwl_obj)
+    result = inputs.fields[0]
     assert result.type == "Directory"
     assert result.required is True
 
@@ -76,9 +70,8 @@ def test_direcotroy():
 def test_int():
     cwl_obj = deepcopy(CWL_UTILS_OBJ_TEMPLATE)
     cwl_obj.inputs[0].type = ["int"]
-    neko = Neko(cwl_obj)
-    neko.punch()
-    result = neko.results[0]
+    inputs = Inputs(cwl_obj)
+    result = inputs.fields[0]
     assert result.type == "int"
     assert result.required is True
 
@@ -86,9 +79,8 @@ def test_int():
 def test_string():
     cwl_obj = deepcopy(CWL_UTILS_OBJ_TEMPLATE)
     cwl_obj.inputs[0].type = ["string"]
-    neko = Neko(cwl_obj)
-    neko.punch()
-    result = neko.results[0]
+    inputs = Inputs(cwl_obj)
+    result = inputs.fields[0]
     assert result.type == "string"
     assert result.required is True
 
@@ -96,8 +88,7 @@ def test_string():
 def test_boolean():
     cwl_obj = deepcopy(CWL_UTILS_OBJ_TEMPLATE)
     cwl_obj.inputs[0].type = ["boolean"]
-    neko = Neko(cwl_obj)
-    neko.punch()
-    result = neko.results[0]
+    inputs = Inputs(cwl_obj)
+    result = inputs.fields[0]
     assert result.type == "boolean"
     assert result.required is True
