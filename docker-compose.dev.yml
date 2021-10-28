@@ -3,9 +3,9 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile-python
-    image: neko-punch-python-dev
-    container_name: neko-punch-python-dev
+      dockerfile: Dockerfile-dev
+    image: cwl-inputs-parser-dev
+    container_name: cwl-inputs-parser-dev
     volumes:
       - ${PWD}:/app
     working_dir: /app

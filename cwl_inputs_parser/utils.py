@@ -16,7 +16,6 @@ from cwl_utils.parser.cwl_v1_2 import (CommandInputArraySchema,
                                        CommandLineTool, ExpressionTool,
                                        InputArraySchema, InputRecordSchema,
                                        Workflow, file_uri)
-from cwltool.main import CWLObjectType
 from requests import get
 
 CWLUtilObj = Union[CommandLineTool, Workflow, ExpressionTool]
@@ -29,44 +28,6 @@ def download_file(remote_url: str) -> str:
     if response.status_code != 200:
         raise Exception(f"Failed to download file: {remote_url}")
     return response.text
-
-
-def cwl_make_template(path: str) -> CWLObjectType:
-    """Returns the results of cwltool --make-template."""
-    import logging
-
-    from cwltool.main import RuntimeContext, arg_parser, argcomplete
-    from cwltool.main import fetch_document as cwltool_fetch_document
-    from cwltool.main import (generate_input_template, get_default_args,
-                              make_tool, resolve_and_validate_document,
-                              resolve_tool_uri, setup_loadingContext)
-
-    logging.getLogger("cwltool").setLevel(logging.ERROR)
-    logging.getLogger("salad").setLevel(logging.ERROR)
-
-    parser = arg_parser()
-    argcomplete.autocomplete(parser)
-    args = parser.parse_args(["--make-template", path])
-    for key, val in get_default_args().items():
-        if not hasattr(args, key):
-            setattr(args, key, val)
-    runtimeContext = RuntimeContext(vars(args))
-    loadingContext = setup_loadingContext(None, runtimeContext, args)
-    uri, _ = resolve_tool_uri(
-        args.workflow,
-        resolver=loadingContext.resolver,
-        fetcher_constructor=loadingContext.fetcher_constructor,
-    )
-    loadingContext, workflowobj, uri = cwltool_fetch_document(
-        uri,
-        loadingContext
-    )
-    loadingContext, uri = resolve_and_validate_document(
-        loadingContext,
-        workflowobj,
-        uri,
-    )
-    return generate_input_template(make_tool(uri, loadingContext))
 
 
 def is_remote_url(path: str) -> bool:
