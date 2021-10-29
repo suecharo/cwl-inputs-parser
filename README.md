@@ -1,5 +1,11 @@
 # cwl-inputs-parser
 
+[![pytest](https://github.com/suecharo/cwl-inputs-parser/workflows/pytest/badge.svg)](https://github.com/suecharo/cwl-inputs-parser/actions?query=workflow%3Apytest)
+[![flake8](https://github.com/suecharo/cwl-inputs-parser/workflows/flake8/badge.svg)](https://github.com/suecharo/cwl-inputs-parser/actions?query=workflow%3Aflake8)
+[![isort](https://github.com/suecharo/cwl-inputs-parser/workflows/isort/badge.svg)](https://github.com/suecharo/cwl-inputs-parser/actions?query=workflow%3Aisort)
+[![mypy](https://github.com/suecharo/cwl-inputs-parser/workflows/mypy/badge.svg)](https://github.com/suecharo/cwl-inputs-parser/actions?query=workflow%3Amypy)
+[![Apache License](https://img.shields.io/badge/license-Apache%202.0-orange.svg?style=flat&color=important)](http://www.apache.org/licenses/LICENSE-2.0)
+
 A library for parsing the inputs field of Common Workflow Language (CWL) document.
 This library aims to use it as a CWL parser to generate a web form to execute the Workflow Execution Service (WES).
 
