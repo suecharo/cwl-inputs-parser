@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # coding: utf-8
+from collections import OrderedDict
 from copy import deepcopy
 from pathlib import Path
-from typing import OrderedDict
 
 from cwl_inputs_parser.utils import Inputs, wf_location_to_inputs
 from yaml import safe_load
