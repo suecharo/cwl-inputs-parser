@@ -41,7 +41,7 @@ setup(
         ]
     },
     data_files=[
-        (".", ["LICENSE", "README.md", "cwl-inputs-parser.schema.json"]),
+        (".", ["LICENSE", "README.md", "cwl-inputs-parser-schema.json"]),
     ],
     classifiers=[
         "Development Status :: 5 - Production/Stable",
