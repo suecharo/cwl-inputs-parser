@@ -1,0 +1,3 @@
+{
+  "wf_content": "#!/usr/bin/env cwl-runner\n\nclass: CommandLineTool\ncwlVersion: v1.2\n\ninputs:\n  file1: File\n\noutputs:\n  output:\n    type: File\n    outputBinding: { glob: output }\n\nbaseCommand: [wc, -l]\n\nstdin: $(inputs.file1.path)\nstdout: output\n"
+}
