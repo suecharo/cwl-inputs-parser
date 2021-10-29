@@ -39,7 +39,7 @@ $ cwl-inputs-parser --help
 To install with docker:
 
 ```bash
-$ docker run -t --rm ghcr.io/suecharo/cwl-inputs-parser:latest --help
+$ docker run -t --rm ghcr.io/suecharo/cwl-inputs-parser:latest cwl-inputs-parser --help
 ```
 
 ## Usage

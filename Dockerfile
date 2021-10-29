@@ -1,5 +1,11 @@
 FROM docker.io/python:3.8.12-slim-buster as builder
 
+RUN apt update && \
+    apt install -y --no-install-recommends \
+    git && \
+    apt clean &&\
+    rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 COPY . .
 
@@ -10,8 +16,6 @@ FROM docker.io/python:3.8.12-slim-buster
 
 RUN apt update && \
     apt install -y --no-install-recommends \
-    curl \
-    git \
     tini && \
     apt clean &&\
     rm -rf /var/lib/apt/lists/*
