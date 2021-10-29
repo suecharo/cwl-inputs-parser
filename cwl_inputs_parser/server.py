@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # coding: utf-8
 from pathlib import Path
-from typing import Tuple, Union
 from traceback import format_exc
+from typing import Tuple, Union
 
 import yaml
 from cwl_utils.parser import load_document_by_string
