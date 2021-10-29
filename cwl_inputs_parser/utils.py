@@ -5,7 +5,7 @@ from collections import OrderedDict
 from copy import deepcopy
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, List, NoReturn, Optional, Union, cast
+from typing import Any, Dict, List, NoReturn, Optional, Union, cast
 
 from cwl_utils.parser import load_document_by_string
 from cwl_utils.parser.cwl_v1_2 import (CommandInputArraySchema,
@@ -117,7 +117,7 @@ class Inputs:
 
     def as_json(self) -> str:
         """Dump as json."""
-        def encode_default(item):
+        def encode_default(item: Any) -> Dict[str, Any]:
             if isinstance(item, object) and hasattr(item, '__dict__'):
                 return item.__dict__
             else:
@@ -125,12 +125,12 @@ class Inputs:
 
         return json.dumps(self.fields, default=encode_default, indent=2)
 
-    def as_dict(self) -> dict:
+    def as_dict(self) -> Any:
         """Dump as dict."""
         str_json = self.as_json()
         return json.loads(str_json)
 
-    def _parse(self):
+    def _parse(self) -> None:
         """Parses inputs field from the CWL object."""
         for inp_obj in self.cwl_obj.inputs:
             if isinstance(inp_obj.type, str):

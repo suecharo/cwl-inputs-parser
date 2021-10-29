@@ -1,0 +1,24 @@
+name: pytest
+
+on: [push, pull_request, workflow_dispatch]
+
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python-version: ["3.6", "3.7", "3.8", "3.9"]
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --no-cache-dir --progress-bar off -U pip setuptools wheel
+          python3 -m pip install --no-cache-dir --progress-bar off -U .[testing]
+      - name: Check with pytest
+        run: |
+          pytest .
