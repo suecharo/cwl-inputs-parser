@@ -25,6 +25,7 @@ setup(
     ],
     extras_require={
         "testing": [
+            "flake8"
             "isort",
             "jsonschema",
             "mypy",

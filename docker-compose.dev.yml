@@ -10,5 +10,7 @@ services:
       - ${PWD}:/app
     ports:
       - 0.0.0.0:8080:8080
+    environment:
+      - DEBUG=true
     restart: on-failure
     working_dir: /app
