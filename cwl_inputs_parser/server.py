@@ -2,10 +2,10 @@
 # coding: utf-8
 from pathlib import Path
 from typing import Tuple, Union
-import json
-from cwl_utils.parser import load_document_by_string
-from flask import Flask, jsonify, request, Response, Blueprint
+
 import yaml
+from cwl_utils.parser import load_document_by_string
+from flask import Blueprint, Flask, Response, jsonify, request
 
 from cwl_inputs_parser.utils import Inputs, wf_location_to_inputs
 
