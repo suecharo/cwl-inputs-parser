@@ -29,4 +29,4 @@ COPY . .
 EXPOSE 8080
 
 ENTRYPOINT ["tini", "--"]
-CMD ["cwl-inputs-parser", "--server"]
+CMD ["cwl-inputs-parser"]

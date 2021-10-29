@@ -3,7 +3,7 @@
 import argparse
 import os
 import sys
-from typing import Union
+from typing import Tuple, Union
 
 from cwl_inputs_parser.server import create_app, fix_errorhandler
 from cwl_inputs_parser.utils import wf_location_to_inputs
@@ -23,12 +23,27 @@ def arg_parser() -> argparse.ArgumentParser:
         help="Run in REST API server mode",
         action="store_true"
     )
+    parser.add_argument(
+        "--host",
+        help="Host name of the REST API server",
+        default="0.0.0.0"
+    )
+    parser.add_argument(
+        "--port",
+        help="Port number of the REST API server",
+        default=8080
+    )
+    parser.add_argument(
+        "-d", "--debug",
+        help="Run in debug mode",
+        action="store_true"
+    )
 
     return parser
 
 
-def debug() -> bool:
-    """Return debug mode."""
+def app_params(args: argparse.Namespace) -> Tuple[str, int, bool]:
+    """Return app parameters."""
     def str2bool(val: Union[str, bool]) -> bool:
         if isinstance(val, bool):
             return val
@@ -39,7 +54,11 @@ def debug() -> bool:
 
         return bool(val)
 
-    return str2bool(os.environ.get("DEBUG", False))
+    debug_env = str2bool(os.environ.get("DEBUG", False))
+    debug_arg = str2bool(args.debug)
+    debug = debug_env or debug_arg
+
+    return args.host, args.port, debug
 
 
 def main() -> None:
@@ -49,7 +68,8 @@ def main() -> None:
     if args.server:
         app = create_app()
         app = fix_errorhandler(app)
-        app.run(host="0.0.0.0", port=8080, debug=debug())
+        host, port, debug = app_params(args)
+        app.run(host=host, port=port, debug=debug)
     else:
         if not args.workflow_location:
             print("[ERROR] The location of the workflow file is not specified.\n")  # noqa: E501

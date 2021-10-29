@@ -20,7 +20,7 @@ The list of test IDs that will not pass is [tests/cwl_conformance_test/failed_te
 
 Requires Python 3.6+
 
-To install from PyPI:
+To install from PyPI: (not working yet...)
 
 ```bash
 $ pip install cwl-inputs-parser
@@ -44,6 +44,16 @@ $ docker run -t --rm ghcr.io/suecharo/cwl-inputs-parser:latest cwl-inputs-parser
 
 ## Usage
 
+It is deployed at `https://cwl-inputs-parser.azurewebsites.net`
+
+The easiest way to use:
+
+```bash
+$ curl -X POST https://cwl-inputs-parser.azurewebsites.net \
+  -d '{"wf_location": "https://raw.githubusercontent.com/suecharo/cwl-inputs-parser/main/tests/cwl_conformance_test/v1.2/wc-tool.cwl"}'
+[{"array":false,"default":null,"doc":null,"id":"file1","label":null,"required":true,"secondaryFiles":null,"type":"File"}]
+```
+
 ### As command line tool
 
 Use as a command line tool:
@@ -57,7 +67,7 @@ $ cwl-inputs-parser /path/to/cwl_document (local file path | remote URL)
 Start the server:
 
 ```bash
-$ cwl-inputs-parser --server
+$ cwl-inputs-parser --server --host 0.0.0.0 --port 8080
  * Serving Flask app 'cwl_inputs_parser.server' (lazy loading)
  * Environment: production
  * Debug mode: off
