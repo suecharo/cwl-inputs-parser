@@ -40,4 +40,23 @@ setup(
             "cwl-inputs-parser=cwl_inputs_parser.main:main",
         ]
     },
+    data_files=[
+        (".", ["LICENSE", "README.md", "cwl-inputs-parser.schema.json"]),
+    ],
+    classifiers=[
+        "Development Status :: 5 - Production/Stable",
+        "Framework :: Flask",
+        "Intended Audience :: Healthcare Industry",
+        "Intended Audience :: Information Technology",
+        "Intended Audience :: Science/Research",
+        "License :: OSI Approved :: Apache Software License",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3 :: Only",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Topic :: Scientific/Engineering",
+        "Topic :: Scientific/Engineering :: Bio-Informatics",
+    ],
 )

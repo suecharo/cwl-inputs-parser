@@ -15,5 +15,7 @@ RUN python3 -m pip install --no-cache-dir --progress-bar off -U pip setuptools w
     python3 -m pip install --progress-bar off -e . && \
     python3 -m pip install --progress-bar off .[testing]
 
+EXPOSE 8080
+
 ENTRYPOINT ["tini", "--"]
 CMD ["sleep", "infinity"]

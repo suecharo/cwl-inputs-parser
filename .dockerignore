@@ -1,0 +1,10 @@
+# Ignore everything
+**
+
+!LICENSE
+!README.md
+!cwl_inputs_parser
+!cwl-inputs-parser-schema.json
+!setup.py
+
+**/__pycache__
