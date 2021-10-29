@@ -5,7 +5,7 @@ import os
 import sys
 from typing import Union
 
-from cwl_inputs_parser.server import create_app
+from cwl_inputs_parser.server import create_app, fix_errorhandler
 from cwl_inputs_parser.utils import wf_location_to_inputs
 
 
@@ -27,7 +27,7 @@ def arg_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def debug():
+def debug() -> bool:
     """Return debug mode."""
     def str2bool(val: Union[str, bool]) -> bool:
         if isinstance(val, bool):
@@ -48,6 +48,7 @@ def main() -> None:
     args = parser.parse_args()
     if args.server:
         app = create_app()
+        app = fix_errorhandler(app)
         app.run(host="0.0.0.0", port=8080, debug=debug())
     else:
         if not args.workflow_location:

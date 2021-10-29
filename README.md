@@ -57,7 +57,7 @@ $ cwl-inputs-parser /path/to/cwl_document (local file path | remote URL)
 Start the server:
 
 ```bash
-$ cwl-inputs-parser -s
+$ cwl-inputs-parser --server
  * Serving Flask app 'cwl_inputs_parser.server' (lazy loading)
  * Environment: production
  * Debug mode: off

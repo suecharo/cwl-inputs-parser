@@ -2,6 +2,7 @@
 # coding: utf-8
 from pathlib import Path
 from typing import Tuple, Union
+from traceback import format_exc
 
 import yaml
 from cwl_utils.parser import load_document_by_string
@@ -18,7 +19,6 @@ def parse() -> Union[Tuple[Response, int], Tuple[Response, int]]:
     Parse the inputs of a workflow.
     """
     req_data = yaml.safe_load(request.get_data().decode("utf-8"))
-    print(req_data)
     wf_location = req_data.get("wf_location", None)
     wf_content = req_data.get("wf_content", None)
     if wf_location is None and wf_content is None:
@@ -39,4 +39,12 @@ def create_app() -> Flask:
     """
     app = Flask(__name__)
     app.register_blueprint(app_bp)
+    return app
+
+
+def fix_errorhandler(app: Flask) -> Flask:
+    @app.errorhandler(Exception)  # type: ignore
+    def error_handler_exception(exception: Exception) -> Tuple[Response, int]:
+        return jsonify({"message": f"The server encountered an internal error:\n{format_exc()}"}), 500  # noqa: E501
+
     return app
