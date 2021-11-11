@@ -18,7 +18,7 @@ from cwl_utils.parser.cwl_v1_2 import (CommandInputArraySchema,
                                        CommandLineTool, ExpressionTool,
                                        InputArraySchema, InputRecordSchema,
                                        Workflow)
-from cwltool.main import CWLObjectType, RuntimeContext, arg_parser, argcomplete
+from cwltool.main import RuntimeContext, arg_parser, argcomplete
 from cwltool.main import fetch_document as cwltool_fetch_document
 from cwltool.main import (generate_input_template, get_default_args, make_tool,
                           resolve_and_validate_document, resolve_tool_uri,
