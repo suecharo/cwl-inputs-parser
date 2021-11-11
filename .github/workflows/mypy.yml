@@ -17,4 +17,4 @@ jobs:
           python3 -m pip install --no-cache-dir --progress-bar off -U .[testing]
       - name: Check with mypy
         run: |
-          mypy --strict ./cwl_inputs_parser
+          mypy --strict --implicit-reexport ./cwl_inputs_parser

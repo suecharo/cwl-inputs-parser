@@ -565,7 +565,7 @@ def wf_location_to_inputs(wf_location: Union[str, Path]) -> Inputs:
     return Inputs(wf_obj)
 
 
-def cwl_make_template(wf_location: Union[str, Path]) -> CWLObjectType:
+def cwl_make_template(wf_location: Union[str, Path]) -> str:
     """Returns the results of cwltool --make-template."""
     logging.getLogger("cwltool").setLevel(logging.ERROR)
     logging.getLogger("salad").setLevel(logging.ERROR)
