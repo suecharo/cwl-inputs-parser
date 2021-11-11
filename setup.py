@@ -8,7 +8,7 @@ long_description = Path(__file__).parent.joinpath("README.md").read_text(encodin
 
 setup(
     name="cwl-inputs-parser",
-    version="1.0.0",
+    version="1.0.1",
     license="Apache 2.0",
     description="The parser of inputs field in Common Workflow Language (CWL)",
     long_description=long_description,
@@ -18,7 +18,7 @@ setup(
     url="https://github.com/suecharo/cwl-inputs-parser",
     python_requires=">=3.6",
     install_requires=[
-        "cwl-utils @ git+https://github.com/common-workflow-language/cwl-utils.git@d5e0338b7fbeb93f2872f9e2268a4af7e092a57b",  # noqa: E501
+        "cwl-utils",
         "flask",
         "pyyaml",
         "requests",

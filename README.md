@@ -20,7 +20,7 @@ The list of test IDs that will not pass is [tests/cwl_conformance_test/failed_te
 
 Requires Python 3.6+
 
-To install from PyPI: (not working yet...)
+To install from PyPI:
 
 ```bash
 $ pip install cwl-inputs-parser
@@ -77,6 +77,9 @@ $ cwl-inputs-parser --server --host 0.0.0.0 --port 8080
 Request with `curl`:
 
 ```bash
+$ curl -X get localhost:8080/health
+{"status":"ok"}
+
 # {"wf_location": "https://path/to/workflow"}
 $ curl -X POST localhost:8080 -d @tests/curl_data_location.json
 ...
@@ -89,6 +92,16 @@ $ curl -X POST \
   localhost:8080 \
   -d '{"wf_location": "https://raw.githubusercontent.com/suecharo/cwl-inputs-parser/main/tests/cwl_conformance_test/v1.2/wc-tool.cwl"}'
 [{"array":false,"default":null,"doc":null,"id":"file1","label":null,"required":true,"secondaryFiles":null,"type":"File"}]
+```
+
+Do cwltool's `--make-template`:
+
+```bash
+$ curl -X POST localhost:8080/make-template -d @tests/curl_data_location.json
+"file1:  # type \"File\"\n    class: File\n    path: a/file/path\n"
+
+$ curl -X POST localhost:8080/make-template -d @tests/curl_data_content.json
+"file1:  # type \"File\"\n    class: File\n    path: a/file/path\n"
 ```
 
 ### As python library

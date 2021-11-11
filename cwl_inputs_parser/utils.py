@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 # coding: utf-8
+import io
 import json
+import logging
 from collections import OrderedDict
 from copy import deepcopy
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, List, NoReturn, Optional, Union, cast
 
+import ruamel.yaml
 from cwl_utils.parser import load_document_by_string
 from cwl_utils.parser.cwl_v1_2 import (CommandInputArraySchema,
                                        CommandInputEnumSchema,
@@ -15,7 +18,13 @@ from cwl_utils.parser.cwl_v1_2 import (CommandInputArraySchema,
                                        CommandLineTool, ExpressionTool,
                                        InputArraySchema, InputRecordSchema,
                                        Workflow)
+from cwltool.main import CWLObjectType, RuntimeContext, arg_parser, argcomplete
+from cwltool.main import fetch_document as cwltool_fetch_document
+from cwltool.main import (generate_input_template, get_default_args, make_tool,
+                          resolve_and_validate_document, resolve_tool_uri,
+                          setup_loadingContext)
 from requests import get
+from ruamel.yaml.main import YAML
 
 CWLUtilObj = Union[CommandLineTool, Workflow, ExpressionTool]
 CWLUtilLoadResult = Union[List[CWLUtilObj], CWLUtilObj]
@@ -554,3 +563,49 @@ def wf_location_to_inputs(wf_location: Union[str, Path]) -> Inputs:
     wf_docs = fetch_document(wf_location)
     wf_obj = load_document_by_string(wf_docs, uri=as_uri(wf_location))
     return Inputs(wf_obj)
+
+
+def cwl_make_template(wf_location: Union[str, Path]) -> CWLObjectType:
+    """Returns the results of cwltool --make-template."""
+    logging.getLogger("cwltool").setLevel(logging.ERROR)
+    logging.getLogger("salad").setLevel(logging.ERROR)
+
+    parser = arg_parser()
+    argcomplete.autocomplete(parser)
+    args = parser.parse_args(["--make-template", str(wf_location)])
+    for key, val in get_default_args().items():
+        if not hasattr(args, key):
+            setattr(args, key, val)
+    runtimeContext = RuntimeContext(vars(args))
+    loadingContext = setup_loadingContext(None, runtimeContext, args)
+    uri, _ = resolve_tool_uri(
+        args.workflow,
+        resolver=loadingContext.resolver,
+        fetcher_constructor=loadingContext.fetcher_constructor,
+    )
+    loadingContext, workflowobj, uri = cwltool_fetch_document(
+        uri,
+        loadingContext
+    )
+    loadingContext, uri = resolve_and_validate_document(
+        loadingContext,
+        workflowobj,
+        uri,
+    )
+
+    def my_represent_none(self: Any, data: Any) -> Any:
+        """Force clean representation of 'null'."""
+        return self.represent_scalar("tag:yaml.org,2002:null", "null")
+
+    ruamel.yaml.representer.RoundTripRepresenter.add_representer(
+        type(None), my_represent_none
+    )
+    yaml = YAML()
+    yaml.default_flow_style = False
+    yaml.indent = 4
+    yaml.block_seq_indent = 2
+    buf = io.BytesIO()
+    yaml.dump(generate_input_template(make_tool(uri, loadingContext)), buf)
+    yaml_str = buf.getvalue().decode("utf-8")
+
+    return yaml_str
