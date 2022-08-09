@@ -77,7 +77,7 @@ def create_app() -> Flask:
 
 
 def fix_errorhandler(app: Flask) -> Flask:
-    @app.errorhandler(Exception)  # type: ignore
+    @app.errorhandler(Exception)
     def error_handler_exception(exception: Exception) -> Tuple[Response, int]:
         return jsonify({"message": f"The server encountered an internal error:\n{format_exc()}"}), 500  # noqa: E501
 
