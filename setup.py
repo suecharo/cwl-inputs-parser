@@ -8,7 +8,7 @@ long_description = Path(__file__).parent.joinpath("README.md").read_text(encodin
 
 setup(
     name="cwl-inputs-parser",
-    version="1.0.1",
+    version="1.0.2",
     license="Apache 2.0",
     description="The parser of inputs field in Common Workflow Language (CWL)",
     long_description=long_description,
