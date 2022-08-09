@@ -22,6 +22,8 @@ setup(
         "flask",
         "pyyaml",
         "requests",
+        "cwltool",
+        "ruamel.yaml",
     ],
     extras_require={
         "testing": [
